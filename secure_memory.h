@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <cstddef>
  
-// Безопасно затирает данные в памяти
-void secure_erase(void* ptr, size_t size);
+// Безопасно затирает память
+void secure_zero(void* ptr, size_t size);
  
 #endif
