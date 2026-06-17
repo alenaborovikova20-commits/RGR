@@ -53,81 +53,81 @@ size_t get_output_size(size_t input_size, int mode) {
     return padded_len(input_size) + GOST_BLOCK;
 }
  
-int encrypt(InputData key, InputData input, OutputData* out) {
-    if (key.length != GOST_KEY) return -1;
+int encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* out) {
+    if (key.size != GOST_KEY) return -1;
  
-    size_t data_pad = padded_len(input.length);
+    size_t data_pad = padded_len(input.size);
     size_t total = data_pad + GOST_BLOCK;
  
-    if (out->length < total) return -2;
+    if (out->size < total) return -2;
  
     uint64_t iv = generate_iv();
-    memcpy(out->bytes, &iv, GOST_BLOCK);
+    memcpy(out->data, &iv, GOST_BLOCK);
  
-    memcpy(out->bytes + GOST_BLOCK, input.bytes, input.length);
-    add_padding(out->bytes + GOST_BLOCK, input.length, data_pad);
+    memcpy(out->data + GOST_BLOCK, input.data, input.size);
+    add_padding(out->data + GOST_BLOCK, input.size, data_pad);
  
     uint32_t round_keys[8];
-    gost_prepare_keys(key.bytes, round_keys);
+    gost_prepare_keys(key.data, round_keys);
  
     for (size_t i = 0; i < data_pad; i += GOST_BLOCK) {
-        gost_encrypt_block(out->bytes + GOST_BLOCK + i,
-                           out->bytes + GOST_BLOCK + i,
+        gost_encrypt_block(out->data + GOST_BLOCK + i,
+                           out->data + GOST_BLOCK + i,
                            round_keys);
     }
  
-    out->length = total;
-    secure_zero((void*)key.bytes, key.length);
+    out->size = total;
+    secure_zero((void*)key.data, key.size);
     return 0;
 }
  
-int decrypt(InputData key, InputData input, OutputData* out) {
-    if (key.length != GOST_KEY) return -1;
-    if (input.length < GOST_BLOCK) return -2;
-    if ((input.length - GOST_BLOCK) % GOST_BLOCK != 0) return -3;
-    if (out->length < input.length) return -4;
+int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* out) {
+    if (key.size != GOST_KEY) return -1;
+    if (input.size < GOST_BLOCK) return -2;
+    if ((input.size - GOST_BLOCK) % GOST_BLOCK != 0) return -3;
+    if (out->size < input.size) return -4;
  
-    size_t cipher_len = input.length - GOST_BLOCK;
-    memcpy(out->bytes, input.bytes + GOST_BLOCK, cipher_len);
+    size_t cipher_len = input.size - GOST_BLOCK;
+    memcpy(out->data, input.data + GOST_BLOCK, cipher_len);
  
     uint32_t round_keys[8];
-    gost_prepare_keys(key.bytes, round_keys);
+    gost_prepare_keys(key.data, round_keys);
  
     for (size_t i = 0; i < cipher_len; i += GOST_BLOCK) {
-        gost_decrypt_block(out->bytes + i, out->bytes + i, round_keys);
+        gost_decrypt_block(out->data + i, out->data + i, round_keys);
     }
  
     size_t real_len = cipher_len;
-    if (remove_padding(out->bytes, &real_len) != 0) return -5;
+    if (remove_padding(out->data, &real_len) != 0) return -5;
  
-    out->length = real_len;
-    secure_zero((void*)key.bytes, key.length);
+    out->size = real_len;
+    secure_zero((void*)key.data, key.size);
     return 0;
 }
  
-int encrypt_fixed_iv(InputData key, InputData iv, InputData input, OutputData* out) {
-    if (key.length != GOST_KEY) return -1;
-    if (iv.length != GOST_BLOCK) return -2;
+int encrypt_fixed_iv(ConstBuffer key, ConstBuffer iv, ConstBuffer input, MutBuffer* out) {
+    if (key.size != GOST_KEY) return -1;
+    if (iv.size != GOST_BLOCK) return -2;
  
-    size_t data_pad = padded_len(input.length);
+    size_t data_pad = padded_len(input.size);
     size_t total = data_pad + GOST_BLOCK;
  
-    if (out->length < total) return -3;
+    if (out->size < total) return -3;
  
-    memcpy(out->bytes, iv.bytes, GOST_BLOCK);
-    memcpy(out->bytes + GOST_BLOCK, input.bytes, input.length);
-    add_padding(out->bytes + GOST_BLOCK, input.length, data_pad);
+    memcpy(out->data, iv.data, GOST_BLOCK);
+    memcpy(out->data + GOST_BLOCK, input.data, input.size);
+    add_padding(out->data + GOST_BLOCK, input.size, data_pad);
  
     uint32_t round_keys[8];
-    gost_prepare_keys(key.bytes, round_keys);
+    gost_prepare_keys(key.data, round_keys);
  
     for (size_t i = 0; i < data_pad; i += GOST_BLOCK) {
-        gost_encrypt_block(out->bytes + GOST_BLOCK + i,
-                           out->bytes + GOST_BLOCK + i,
+        gost_encrypt_block(out->data + GOST_BLOCK + i,
+                           out->data + GOST_BLOCK + i,
                            round_keys);
     }
  
-    out->length = total;
+    out->size = total;
     return 0;
 }
  

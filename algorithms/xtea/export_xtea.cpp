@@ -83,136 +83,136 @@ size_t get_output_size(size_t input_size, int mode) {
 }
  
 // Зашифровать данные
-int encrypt(InputData key, InputData input, OutputData* output) {
+int encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
     // Проверка размера ключа
-    if (key.length != XTEA_KEY) {
+    if (key.size != XTEA_KEY) {
         return -1;
     }
     
-    size_t data_with_padding = padded_length(input.length);
+    size_t data_with_padding = padded_length(input.size);
     size_t total = data_with_padding + XTEA_BLOCK;
     
     // Проверка, хватает ли места в выходном буфере
-    if (output->length < total) {
+    if (output->size < total) {
         return -2;
     }
     
     //кладём IV в начало
     uint64_t iv = random_iv();
-    memcpy(output->bytes, &iv, XTEA_BLOCK);
+    memcpy(output->data, &iv, XTEA_BLOCK);
     
     //копируем данные и добавляем паддинг
-    memcpy(output->bytes + XTEA_BLOCK, input.bytes, input.length);
-    add_padding(output->bytes + XTEA_BLOCK, input.length, data_with_padding);
+    memcpy(output->data + XTEA_BLOCK, input.data, input.size);
+    add_padding(output->data + XTEA_BLOCK, input.size, data_with_padding);
     
     //готовим раундовые ключи
     uint32_t round_keys[4];
-    xtea_prepare_keys(key.bytes, round_keys);
+    xtea_prepare_keys(key.data, round_keys);
     
     //шифруем каждый блок
     for (size_t i = 0; i < data_with_padding; i += XTEA_BLOCK) {
         xtea_encrypt(
-            output->bytes + XTEA_BLOCK + i,
-            output->bytes + XTEA_BLOCK + i,
+            output->data + XTEA_BLOCK + i,
+            output->data + XTEA_BLOCK + i,
             round_keys
         );
     }
     
-    output->length = total;
+    output->size = total;
     
     //затираем ключ в памяти (безопасность)
-    secure_zero((void*)key.bytes, key.length);
+    secure_zero((void*)key.data, key.size);
     
     return 0;
 }
  
 // Расшифровать данные
-int decrypt(InputData key, InputData input, OutputData* output) {
+int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
     // Проверка ключа
-    if (key.length != XTEA_KEY) {
+    if (key.size != XTEA_KEY) {
         return -1;
     }
     
     // Проверка размера входных данных (должен быть хотя бы IV)
-    if (input.length < XTEA_BLOCK) {
+    if (input.size < XTEA_BLOCK) {
         return -2;
     }
     
     // Проверка, что длина шифротекста кратна блоку
-    if ((input.length - XTEA_BLOCK) % XTEA_BLOCK != 0) {
+    if ((input.size - XTEA_BLOCK) % XTEA_BLOCK != 0) {
         return -3;
     }
     
-    if (output->length < input.length) {
+    if (output->size < input.size) {
         return -4;
     }
     
     // Пропускаем IV (первые 8 байт)
-    size_t cipher_length = input.length - XTEA_BLOCK;
-    memcpy(output->bytes, input.bytes + XTEA_BLOCK, cipher_length);
+    size_t cipher_length = input.size - XTEA_BLOCK;
+    memcpy(output->data, input.data + XTEA_BLOCK, cipher_length);
     
     // Готовим ключи
     uint32_t round_keys[4];
-    xtea_prepare_keys(key.bytes, round_keys);
+    xtea_prepare_keys(key.data, round_keys);
     
     // Расшифровываем каждый блок
     for (size_t i = 0; i < cipher_length; i += XTEA_BLOCK) {
         xtea_decrypt(
-            output->bytes + i,
-            output->bytes + i,
+            output->data + i,
+            output->data + i,
             round_keys
         );
     }
     
     // Убираем паддинг
     size_t real_length = cipher_length;
-    if (remove_padding(output->bytes, &real_length) != 0) {
+    if (remove_padding(output->data, &real_length) != 0) {
         return -5;
     }
     
-    output->length = real_length;
+    output->size = real_length;
     
     // Затираем ключ
-    secure_zero((void*)key.bytes, key.length);
+    secure_zero((void*)key.data, key.size);
     
     return 0;
 }
  
 // Для тестирования: шифрование с фиксированным IV 
-int encrypt_fixed_iv(InputData key, InputData iv, InputData input, OutputData* output) {
+int encrypt_fixed_iv(ConstBuffer key, ConstBuffer iv, ConstBuffer input, MutBuffer* output) {
     // Проверки
-    if (key.length != XTEA_KEY) {
+    if (key.size != XTEA_KEY) {
         return -1;
     }
     
-    if (iv.length != XTEA_BLOCK) {
+    if (iv.size != XTEA_BLOCK) {
         return -2;
     }
     
-    size_t data_with_padding = padded_length(input.length);
+    size_t data_with_padding = padded_length(input.size);
     size_t total = data_with_padding + XTEA_BLOCK;
     
-    if (output->length < total) {
+    if (output->size < total) {
         return -3;
     }
     
     // Используем переданный IV, а не случайный
-    memcpy(output->bytes, iv.bytes, XTEA_BLOCK);
-    memcpy(output->bytes + XTEA_BLOCK, input.bytes, input.length);
-    add_padding(output->bytes + XTEA_BLOCK, input.length, data_with_padding);
+    memcpy(output->data, iv.data, XTEA_BLOCK);
+    memcpy(output->data + XTEA_BLOCK, input.data, input.size);
+    add_padding(output->data + XTEA_BLOCK, input.size, data_with_padding);
     
     uint32_t round_keys[4];
-    xtea_prepare_keys(key.bytes, round_keys);
+    xtea_prepare_keys(key.data, round_keys);
     
     for (size_t i = 0; i < data_with_padding; i += XTEA_BLOCK) {
         xtea_encrypt(
-            output->bytes + XTEA_BLOCK + i,
-            output->bytes + XTEA_BLOCK + i,
+            output->data + XTEA_BLOCK + i,
+            output->data + XTEA_BLOCK + i,
             round_keys
         );
     }
     
-    output->length = total;
+    output->size = total;
     return 0;
 }
  

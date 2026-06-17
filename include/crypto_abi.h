@@ -4,18 +4,18 @@
 #include <cstdint>
 #include <cstddef>
  
-struct InputData {
-    const uint8_t* bytes;   
-    size_t length;        
+struct ConstBuffer {
+    const uint8_t* data;   
+    size_t size;        
 };
  
-struct OutputData {
-    uint8_t* bytes;       
-    size_t length;          
+struct MutBuffer {
+    uint8_t* data;       
+    size_t size;          
 };
  
 struct AlgorithmInfo {
-    const char* name;      
+    const char* algorithm_name;      
     size_t key_size;        
 };
  
