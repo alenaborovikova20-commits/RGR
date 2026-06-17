@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -fPIC CMakeFiles/cryptum.dir/src/main.cpp.o CMakeFiles/cryptum.dir/src/cryptum.cpp.o -o cryptum  -ldl 

@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -Wall -Wextra -fPIC -shared -Wl,-soname,libmo.so -o libmo.so CMakeFiles/mo.dir/algorithms/mo/mo.cpp.o CMakeFiles/mo.dir/algorithms/mo/export_mo.cpp.o 

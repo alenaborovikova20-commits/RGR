@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -Wall -Wextra -fPIC -shared -Wl,-soname,libgost.so -o libgost.so CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.o 

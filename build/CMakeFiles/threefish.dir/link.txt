@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -Wall -Wextra -fPIC -shared -Wl,-soname,libthreefish.so -o libthreefish.so CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.o 

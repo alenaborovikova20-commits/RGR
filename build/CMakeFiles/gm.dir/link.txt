@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -Wall -Wextra -fPIC -shared -Wl,-soname,libgm.so -o libgm.so CMakeFiles/gm.dir/algorithms/gm/gm.cpp.o CMakeFiles/gm.dir/algorithms/gm/export_gm.cpp.o 
