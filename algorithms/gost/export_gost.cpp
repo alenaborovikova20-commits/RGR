@@ -1,6 +1,6 @@
 #include "crypto_abi.h"
 #include "gost.h"
-#include <secure_memory.h>
+#include "secure_memory.h"
 #include <cstring>
 #include <random>
  
