@@ -1,4 +1,4 @@
-#include "include/crypto_abi.h"
+#include "crypto_abi.h"
 #include "threefish.h"
 #include <cstring>
 
