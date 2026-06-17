@@ -4,22 +4,19 @@
 #include <cstdint>
 #include <cstddef>
  
-// Входные данные (только читаем)
 struct InputData {
-    const uint8_t* bytes;   // байты данных
-    size_t length;          // размер данных
+    const uint8_t* bytes;   
+    size_t length;        
 };
  
-// Выходные данные (можно писать)
 struct OutputData {
-    uint8_t* bytes;         // байты данных
-    size_t length;          // размер данных
+    uint8_t* bytes;       
+    size_t length;          
 };
  
-// Информация об алгоритме
 struct AlgorithmInfo {
-    const char* name;       // название алгоритма
-    size_t key_size;        // размер ключа
+    const char* name;      
+    size_t key_size;        
 };
  
 #endif

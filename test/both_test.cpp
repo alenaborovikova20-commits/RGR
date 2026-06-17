@@ -7,7 +7,7 @@
  
 using namespace std;
  
-// ==================== XTEA ====================
+// XTEA 
 #define XTEA_BLOCK 8
 #define XTEA_KEY 16
 #define XTEA_ROUNDS 32
@@ -70,7 +70,7 @@ void xtea_decrypt_block(const uint8_t* in, uint8_t* out, const uint32_t* keys) {
     out[7] = (right >> 24) & 0xFF;
 }
  
-// ==================== ГОСТ 28147-89 ====================
+//ГОСТ 28147-89
 #define GOST_BLOCK 8
 #define GOST_KEY 32
 #define GOST_ROUNDS 32
@@ -79,7 +79,6 @@ void gost_prepare_keys(const uint8_t* key, uint32_t* round_keys);
 void gost_encrypt_block(const uint8_t* in, uint8_t* out, const uint32_t* round_keys);
 void gost_decrypt_block(const uint8_t* in, uint8_t* out, const uint32_t* round_keys);
  
-// Реализация ГОСТ (такая же как в gost28147.cpp)
 static const uint8_t GOST_SBOX[8][16] = {
     {0x9, 0x6, 0x3, 0x2, 0x8, 0xB, 0x1, 0x7, 0xA, 0x4, 0xE, 0xF, 0xC, 0x0, 0xD, 0x5},
     {0x3, 0x7, 0xE, 0x9, 0x8, 0xA, 0xF, 0x0, 0x5, 0x2, 0x6, 0xC, 0xB, 0x4, 0xD, 0x1},
@@ -169,7 +168,7 @@ void gost_decrypt_block(const uint8_t* input, uint8_t* output, const uint32_t* r
             left = right;
             right = temp;
         }
-    }
+    }.
     
     output[0] = left & 0xFF;
     output[1] = (left >> 8) & 0xFF;
@@ -181,7 +180,7 @@ void gost_decrypt_block(const uint8_t* input, uint8_t* output, const uint32_t* r
     output[7] = (right >> 24) & 0xFF;
 }
  
-// ==================== PKCS#7 ====================
+//PKCS#7 
 vector<uint8_t> add_padding(const vector<uint8_t>& data, size_t block) {
     size_t pad = block - (data.size() % block);
     if (pad == 0) pad = block;
@@ -197,7 +196,7 @@ vector<uint8_t> remove_padding(const vector<uint8_t>& data) {
     return vector<uint8_t>(data.begin(), data.end() - pad);
 }
  
-// ==================== XTEA файловые операции ====================
+//XTEA файловые операции
 void xtea_encrypt_file(const string& in_name, const string& out_name, const uint8_t* key) {
     ifstream in(in_name, ios::binary);
     vector<uint8_t> plain((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
@@ -234,7 +233,7 @@ void xtea_decrypt_file(const string& in_name, const string& out_name, const uint
     out.close();
 }
  
-// ==================== ГОСТ файловые операции ====================
+// ГОСТ файловые операции
 void gost_encrypt_file(const string& in_name, const string& out_name, const uint8_t* key) {
     ifstream in(in_name, ios::binary);
     vector<uint8_t> plain((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
@@ -271,7 +270,7 @@ void gost_decrypt_file(const string& in_name, const string& out_name, const uint
     out.close();
 }
  
-// ==================== Тесты ====================
+// Тесты 
 void test_xtea() {
     cout << "\n[XTEA]" << endl;
     uint8_t key[XTEA_KEY] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
@@ -305,7 +304,6 @@ void test_gost() {
     cout << "  Result: " << (ok ? "PASS" : "FAIL") << endl;
 }
  
-// ==================== Main ====================
 int main() {
     try {
         test_xtea();
