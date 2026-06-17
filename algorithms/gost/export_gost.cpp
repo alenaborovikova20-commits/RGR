@@ -1,5 +1,6 @@
 #include "crypto_abi.h"
 #include "gost.h"
+#include <secure_memory.h>
 #include <cstring>
 #include <random>
  
@@ -40,13 +41,6 @@ static uint64_t generate_iv() {
     return dist(rng);
 }
  
-static void secure_zero(void* ptr, size_t size) {
-    if (ptr == NULL || size == 0) return;
-    volatile uint8_t* v = (volatile uint8_t*)ptr;
-    for (size_t i = 0; i < size; i++) {
-        v[i] = 0;
-    }
-}
  
 extern "C" {
  

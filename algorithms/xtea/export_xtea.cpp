@@ -121,7 +121,7 @@ int encrypt(InputData key, InputData input, OutputData* output) {
     output->length = total;
     
     //затираем ключ в памяти (безопасность)
-    secure_erase((void*)key.bytes, key.length);
+    secure_zero((void*)key.bytes, key.length);
     
     return 0;
 }
@@ -173,7 +173,7 @@ int decrypt(InputData key, InputData input, OutputData* output) {
     output->length = real_length;
     
     // Затираем ключ
-    secure_erase((void*)key.bytes, key.length);
+    secure_zero((void*)key.bytes, key.length);
     
     return 0;
 }

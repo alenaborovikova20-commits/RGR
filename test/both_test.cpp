@@ -21,7 +21,7 @@ void xtea_expand_key(const uint8_t* key, uint32_t* keys) {
         keys[i] |= (uint32_t)key[i*4+1] << 8;
         keys[i] |= (uint32_t)key[i*4+2] << 16;
         keys[i] |= (uint32_t)key[i*4+3] << 24;
-    }
+}
 }
  
 void xtea_encrypt_block(const uint8_t* in, uint8_t* out, const uint32_t* keys) {
@@ -35,7 +35,7 @@ void xtea_encrypt_block(const uint8_t* in, uint8_t* out, const uint32_t* keys) {
         left += (((right << 4) ^ (right >> 5)) + right) ^ (sum + keys[sum & 3]);
         sum += XTEA_DELTA;
         right += (((left << 4) ^ (left >> 5)) + left) ^ (sum + keys[(sum >> 11) & 3]);
-    }
+}
  
     out[0] = left & 0xFF;
     out[1] = (left >> 8) & 0xFF;
@@ -58,7 +58,7 @@ void xtea_decrypt_block(const uint8_t* in, uint8_t* out, const uint32_t* keys) {
         right -= (((left << 4) ^ (left >> 5)) + left) ^ (sum + keys[(sum >> 11) & 3]);
         sum -= XTEA_DELTA;
         left -= (((right << 4) ^ (right >> 5)) + right) ^ (sum + keys[sum & 3]);
-    }
+}
  
     out[0] = left & 0xFF;
     out[1] = (left >> 8) & 0xFF;
@@ -99,7 +99,7 @@ static uint32_t gost_substitute(uint32_t x) {
     for (int i = 0; i < 8; i++) {
         uint8_t nibble = (x >> (4 * i)) & 0x0F;
         res |= (uint32_t)GOST_SBOX[i][nibble] << (4 * i);
-    }
+}
     return res;
 }
  
@@ -113,7 +113,7 @@ void gost_prepare_keys(const uint8_t* user_key, uint32_t* round_keys) {
                         (uint32_t)user_key[i*4+1] << 8 |
                         (uint32_t)user_key[i*4+2] << 16 |
                         (uint32_t)user_key[i*4+3] << 24;
-    }
+}
 }
  
 void gost_encrypt_block(const uint8_t* input, uint8_t* output, const uint32_t* round_keys) {
@@ -127,7 +127,7 @@ void gost_encrypt_block(const uint8_t* input, uint8_t* output, const uint32_t* r
     const int key_order[32] = {
         0,1,2,3,4,5,6,7, 0,1,2,3,4,5,6,7,
         0,1,2,3,4,5,6,7, 7,6,5,4,3,2,1,0
-    };
+};
     
     for (int i = 0; i < 32; i++) {
         gost_round(left, right, round_keys[key_order[i]]);
@@ -136,7 +136,7 @@ void gost_encrypt_block(const uint8_t* input, uint8_t* output, const uint32_t* r
             left = right;
             right = temp;
         }
-    }
+}
     
     output[0] = left & 0xFF;
     output[1] = (left >> 8) & 0xFF;
@@ -159,7 +159,7 @@ void gost_decrypt_block(const uint8_t* input, uint8_t* output, const uint32_t* r
     const int key_order[32] = {
         0,1,2,3,4,5,6,7, 0,1,2,3,4,5,6,7,
         0,1,2,3,4,5,6,7, 7,6,5,4,3,2,1,0
-    };
+};
     
     for (int i = 31; i >= 0; i--) {
         gost_round(left, right, round_keys[key_order[i]]);
@@ -168,7 +168,7 @@ void gost_decrypt_block(const uint8_t* input, uint8_t* output, const uint32_t* r
             left = right;
             right = temp;
         }
-    }.
+}
     
     output[0] = left & 0xFF;
     output[1] = (left >> 8) & 0xFF;
@@ -208,7 +208,7 @@ void xtea_encrypt_file(const string& in_name, const string& out_name, const uint
     vector<uint8_t> cipher(padded.size());
     for (size_t i = 0; i < padded.size(); i += XTEA_BLOCK) {
         xtea_encrypt_block(&padded[i], &cipher[i], keys);
-    }
+}
  
     ofstream out(out_name, ios::binary);
     out.write((char*)cipher.data(), cipher.size());
@@ -225,7 +225,7 @@ void xtea_decrypt_file(const string& in_name, const string& out_name, const uint
     vector<uint8_t> padded(cipher.size());
     for (size_t i = 0; i < cipher.size(); i += XTEA_BLOCK) {
         xtea_decrypt_block(&cipher[i], &padded[i], keys);
-    }
+}
  
     vector<uint8_t> plain = remove_padding(padded);
     ofstream out(out_name, ios::binary);
@@ -245,7 +245,7 @@ void gost_encrypt_file(const string& in_name, const string& out_name, const uint
     vector<uint8_t> cipher(padded.size());
     for (size_t i = 0; i < padded.size(); i += GOST_BLOCK) {
         gost_encrypt_block(&padded[i], &cipher[i], keys);
-    }
+}
  
     ofstream out(out_name, ios::binary);
     out.write((char*)cipher.data(), cipher.size());
@@ -262,7 +262,7 @@ void gost_decrypt_file(const string& in_name, const string& out_name, const uint
     vector<uint8_t> padded(cipher.size());
     for (size_t i = 0; i < cipher.size(); i += GOST_BLOCK) {
         gost_decrypt_block(&cipher[i], &padded[i], keys);
-    }
+}
  
     vector<uint8_t> plain = remove_padding(padded);
     ofstream out(out_name, ios::binary);
@@ -291,7 +291,7 @@ void test_gost() {
     uint8_t key[GOST_KEY] = {
         1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,
         17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32
-    };
+};
     uint8_t plain[8] = {'H','e','l','l','o','!','!','!'};
     uint8_t cipher[8], dec[8];
     uint32_t keys[8];
@@ -325,9 +325,9 @@ int main() {
         gost_decrypt_file("image_gost.enc", "image_gost_dec.jpg", gost_key);
  
         cout << "\nDone!" << endl;
-    } catch (const exception& e) {
+} catch (const exception& e) {
         cerr << "Error: " << e.what() << endl;
         return 1;
-    }
+}
     return 0;
 }
