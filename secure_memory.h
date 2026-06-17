@@ -4,6 +4,6 @@
 #include <cstdint>
 #include <cstddef>
  
-void secure_zero(void* ptr, size_t size);
+void secure_erase(void* ptr, size_t size);
  
 #endif

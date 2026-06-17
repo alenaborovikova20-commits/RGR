@@ -77,7 +77,7 @@ int encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* out) {
     }
  
     out->size = total;
-    secure_zero((void*)key.data, key.size);
+    secure_erase((void*)key.data, key.size);
     return 0;
 }
  
@@ -101,7 +101,7 @@ int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* out) {
     if (remove_padding(out->data, &real_len) != 0) return -5;
  
     out->size = real_len;
-    secure_zero((void*)key.data, key.size);
+    secure_erase((void*)key.data, key.size);
     return 0;
 }
  

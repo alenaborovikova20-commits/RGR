@@ -121,7 +121,7 @@ int encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
     output->size = total;
     
     //затираем ключ в памяти (безопасность)
-    secure_zero((void*)key.data, key.size);
+    secure_erase((void*)key.data, key.size);
     
     return 0;
 }
@@ -173,7 +173,7 @@ int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
     output->size = real_length;
     
     // Затираем ключ
-    secure_zero((void*)key.data, key.size);
+    secure_erase((void*)key.data, key.size);
     
     return 0;
 }
