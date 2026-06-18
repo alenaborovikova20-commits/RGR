@@ -63,13 +63,13 @@ CMAKE_BINARY_DIR = /home/ushaneva/Документы/prog/RGR/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
+all: CMakeFiles/cryptum.dir/all
 all: CMakeFiles/rc5.dir/all
 all: CMakeFiles/threefish.dir/all
 all: CMakeFiles/xtea.dir/all
 all: CMakeFiles/gost.dir/all
 all: CMakeFiles/gm.dir/all
-all: CMakeFiles/mo.dir/all
-all: CMakeFiles/cryptum.dir/all
+all: CMakeFiles/blowfish.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -77,14 +77,40 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
+clean: CMakeFiles/cryptum.dir/clean
 clean: CMakeFiles/rc5.dir/clean
 clean: CMakeFiles/threefish.dir/clean
 clean: CMakeFiles/xtea.dir/clean
 clean: CMakeFiles/gost.dir/clean
 clean: CMakeFiles/gm.dir/clean
-clean: CMakeFiles/mo.dir/clean
-clean: CMakeFiles/cryptum.dir/clean
+clean: CMakeFiles/blowfish.dir/clean
 .PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/cryptum.dir
+
+# All Build rule for target.
+CMakeFiles/cryptum.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=4,5,6 "Built target cryptum"
+.PHONY : CMakeFiles/cryptum.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/cryptum.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ushaneva/Документы/prog/RGR/build/CMakeFiles 3
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/cryptum.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ushaneva/Документы/prog/RGR/build/CMakeFiles 0
+.PHONY : CMakeFiles/cryptum.dir/rule
+
+# Convenience name for target.
+cryptum: CMakeFiles/cryptum.dir/rule
+.PHONY : cryptum
+
+# clean rule for target.
+CMakeFiles/cryptum.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/clean
+.PHONY : CMakeFiles/cryptum.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/rc5.dir
@@ -171,7 +197,7 @@ CMakeFiles/xtea.dir/clean:
 CMakeFiles/gost.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gost.dir/build.make CMakeFiles/gost.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gost.dir/build.make CMakeFiles/gost.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=7,8,9 "Built target gost"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=10,11,12 "Built target gost"
 .PHONY : CMakeFiles/gost.dir/all
 
 # Build rule for subdir invocation for target.
@@ -197,7 +223,7 @@ CMakeFiles/gost.dir/clean:
 CMakeFiles/gm.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gm.dir/build.make CMakeFiles/gm.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gm.dir/build.make CMakeFiles/gm.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=4,5,6 "Built target gm"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=7,8,9 "Built target gm"
 .PHONY : CMakeFiles/gm.dir/all
 
 # Build rule for subdir invocation for target.
@@ -217,56 +243,30 @@ CMakeFiles/gm.dir/clean:
 .PHONY : CMakeFiles/gm.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/mo.dir
+# Target rules for target CMakeFiles/blowfish.dir
 
 # All Build rule for target.
-CMakeFiles/mo.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mo.dir/build.make CMakeFiles/mo.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mo.dir/build.make CMakeFiles/mo.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=10,11,12 "Built target mo"
-.PHONY : CMakeFiles/mo.dir/all
+CMakeFiles/blowfish.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/blowfish.dir/build.make CMakeFiles/blowfish.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/blowfish.dir/build.make CMakeFiles/blowfish.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=1,2,3 "Built target blowfish"
+.PHONY : CMakeFiles/blowfish.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/mo.dir/rule: cmake_check_build_system
+CMakeFiles/blowfish.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ushaneva/Документы/prog/RGR/build/CMakeFiles 3
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/mo.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/blowfish.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ushaneva/Документы/prog/RGR/build/CMakeFiles 0
-.PHONY : CMakeFiles/mo.dir/rule
+.PHONY : CMakeFiles/blowfish.dir/rule
 
 # Convenience name for target.
-mo: CMakeFiles/mo.dir/rule
-.PHONY : mo
+blowfish: CMakeFiles/blowfish.dir/rule
+.PHONY : blowfish
 
 # clean rule for target.
-CMakeFiles/mo.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mo.dir/build.make CMakeFiles/mo.dir/clean
-.PHONY : CMakeFiles/mo.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/cryptum.dir
-
-# All Build rule for target.
-CMakeFiles/cryptum.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=1,2,3 "Built target cryptum"
-.PHONY : CMakeFiles/cryptum.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/cryptum.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ushaneva/Документы/prog/RGR/build/CMakeFiles 3
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/cryptum.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ushaneva/Документы/prog/RGR/build/CMakeFiles 0
-.PHONY : CMakeFiles/cryptum.dir/rule
-
-# Convenience name for target.
-cryptum: CMakeFiles/cryptum.dir/rule
-.PHONY : cryptum
-
-# clean rule for target.
-CMakeFiles/cryptum.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/clean
-.PHONY : CMakeFiles/cryptum.dir/clean
+CMakeFiles/blowfish.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/blowfish.dir/build.make CMakeFiles/blowfish.dir/clean
+.PHONY : CMakeFiles/blowfish.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

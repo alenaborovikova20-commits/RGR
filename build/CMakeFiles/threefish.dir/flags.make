@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -Dthreefish_EXPORTS
 
-CXX_INCLUDES = -I/home/ushaneva/Документы/prog/RGR/include -I/home/ushaneva/Документы/prog/RGR/src -I/home/ushaneva/Документы/prog/RGR/algorithms/threefish
+CXX_INCLUDES = -I/home/ushaneva/Документы/prog/RGR -I/home/ushaneva/Документы/prog/RGR/algorithms/threefish -I/home/ushaneva/Документы/prog/RGR/include
 
-CXX_FLAGS =  -Wall -Wextra -fPIC -std=gnu++17 -fPIC
+CXX_FLAGS = -std=gnu++17 -fPIC
 

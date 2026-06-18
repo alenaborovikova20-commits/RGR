@@ -49,7 +49,6 @@ int encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
                         output->data + i * 8 * sizeof(int64_t), 
                         pub_key.data);
     }
-    
     output->size = needed;
     return 0;
 }
@@ -71,7 +70,6 @@ int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
                         output->data + i, 
                         priv_key.data);
     }
-    
     output->size = num_blocks;
     return 0;
 }

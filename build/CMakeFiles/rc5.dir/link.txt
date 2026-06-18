@@ -1,1 +1,1 @@
-/usr/bin/c++ -fPIC  -Wall -Wextra -fPIC -shared -Wl,-soname,librc5.so -o librc5.so CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.o CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.o 
+/usr/bin/c++ -fPIC -shared -Wl,-soname,librc5.so -o /home/ushaneva/Документы/prog/RGR/plugins/librc5.so CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.o CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.o 

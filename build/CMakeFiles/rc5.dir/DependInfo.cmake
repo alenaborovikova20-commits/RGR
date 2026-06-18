@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/ushaneva/Документы/prog/RGR/algorithms/RC5/export_rc5.cpp" "CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.o" "gcc" "CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.o.d"
-  "/home/ushaneva/Документы/prog/RGR/algorithms/RC5/rc5.cpp" "CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.o" "gcc" "CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.o.d"
+  "/home/ushaneva/Документы/prog/RGR/algorithms/rc5/export_rc5.cpp" "CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.o" "gcc" "CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.o.d"
+  "/home/ushaneva/Документы/prog/RGR/algorithms/rc5/rc5.cpp" "CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.o" "gcc" "CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

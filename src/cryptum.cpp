@@ -25,38 +25,42 @@ CryptumApp::~CryptumApp() {
 // ==================== ЗАГРУЗКА ПЛАГИНОВ ====================
 
 bool CryptumApp::load_plugins() {
-    const std::vector<std::string> libs = {"rc5", "threefish", "xtea", "gost", "gm", "mo"};
-    
+    const std::vector<std::string> libs = {"rc5", "threefish", "xtea", "gost", "gm", "blowfish"};
+
     for (const auto& lib_name : libs) {
-        std::string so_path = "./lib" + lib_name + ".so";
+        std::string so_path = "./plugins/lib" + lib_name + ".so";
         auto plugin = std::make_unique<CryptoPlugin>();
+        
         plugin->handle = dlopen(so_path.c_str(), RTLD_LAZY);
         if (!plugin->handle) {
             std::cerr << "[WARN] Не загружено: " << so_path << std::endl;
             continue;
         }
-        
+
         plugin->get_info = (const AlgorithmInfo*(*)())dlsym(plugin->handle, "get_algorithm_info");
         plugin->get_out_size = (size_t(*)(size_t,int))dlsym(plugin->handle, "get_output_size");
         plugin->encrypt = (int(*)(ConstBuffer,ConstBuffer,MutBuffer*))dlsym(plugin->handle, "encrypt");
         plugin->decrypt = (int(*)(ConstBuffer,ConstBuffer,MutBuffer*))dlsym(plugin->handle, "decrypt");
         plugin->get_key_info = (const char*(*)())dlsym(plugin->handle, "get_key_info");
         plugin->generate_key = (int(*)(uint8_t*,size_t*,int))dlsym(plugin->handle, "generate_key");
-        
+
         if (!plugin->get_info || !plugin->get_out_size || !plugin->encrypt || !plugin->decrypt) {
+            std::cerr << "[WARN] Не хватает функций в " << so_path << std::endl;
             dlclose(plugin->handle);
             continue;
         }
-        
+
         auto info = plugin->get_info();
         plugin->name = info->algorithm_name;
         plugin->key_size = info->key_size;
         plugin->key_format_info = plugin->get_key_info ? plugin->get_key_info() : "Нет информации";
-        
+
         std::cout << "[OK] Загружен: " << plugin->name << " (ключ: " << plugin->key_size << " байт)" << std::endl;
-        plugins.push_back(std::move(plugin));
+        
+        // ===== ДОБАВЛЯЕМ ПЛАГИН В СПИСОК! =====
+        plugins.push_back(std::move(plugin));  // ← ЭТО БЫЛО ПРОПУЩЕНО!
     }
-    
+
     if (plugins.empty()) {
         std::cerr << "[ERROR] Не загружено ни одного плагина!" << std::endl;
         return false;
@@ -194,7 +198,13 @@ std::vector<uint8_t> CryptumApp::encrypt_data(CryptoPlugin* plugin,
         MutBuffer out_buf = {out_buf_data.data(), out_buf_data.size()};
         ConstBuffer key_buf = {key.data(), key.size()};
         ConstBuffer in_buf = {data.data(), data.size()};
-        
+        printf("[DEBUG] encrypt_data: data.size=%zu\n", data.size());
+        printf("[DEBUG] encrypt_data: key.size=%zu\n", key.size());
+        printf("[DEBUG] encrypt_data: key first 16 bytes: ");
+        for (size_t i = 0; i < 16 && i < key.size(); i++) {
+            printf("%02x ", key[i]);
+        }
+        printf("\n");
         int ret = plugin->encrypt(key_buf, in_buf, &out_buf);
         if (ret != 0) {
             throw std::runtime_error("Ошибка шифрования: код " + std::to_string(ret));
@@ -224,6 +234,7 @@ std::vector<uint8_t> CryptumApp::decrypt_data(CryptoPlugin* plugin,
         MutBuffer out_buf = {out_buf_data.data(), out_buf_data.size()};
         ConstBuffer in_buf = {data.data(), data.size()};
         
+        printf("\n");
         int ret = plugin->decrypt(key_buf, in_buf, &out_buf);
         if (ret != 0) {
             throw std::runtime_error("Ошибка асимметричного расшифрования: код " + std::to_string(ret));
@@ -233,8 +244,14 @@ std::vector<uint8_t> CryptumApp::decrypt_data(CryptoPlugin* plugin,
         result = out_buf_data;
         
     } else {
-        // Симметричное расшифрование
-        size_t out_size = data.size() * 4 + 4096;
+        // СИММЕТРИЧНОЕ РАСШИФРОВАНИЕ
+        // ===== ИСПРАВЛЕНО! =====
+        size_t out_size = plugin->get_out_size(data.size(), 0);  // ← 0 = DECRYPT!
+        if (out_size == 0 || out_size < data.size()) {
+            out_size = data.size() * 4 + 4096;
+        }
+        // =========================
+        
         std::vector<uint8_t> out_buf_data(out_size);
         MutBuffer out_buf = {out_buf_data.data(), out_buf_data.size()};
         ConstBuffer key_buf = {key.data(), key.size()};

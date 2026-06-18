@@ -1,6 +1,5 @@
 #include "crypto_abi.h"
 #include "gost.h"
-#include "secure_memory.h"
 #include <cstring>
 #include <random>
  
@@ -75,7 +74,6 @@ int encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* out) {
                            out->data + GOST_BLOCK + i,
                            round_keys);
     }
- 
     out->size = total;
     return 0;
 }
@@ -98,7 +96,6 @@ int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* out) {
  
     size_t real_len = cipher_len;
     if (remove_padding(out->data, &real_len) != 0) return -5;
- 
     out->size = real_len;
     return 0;
 }

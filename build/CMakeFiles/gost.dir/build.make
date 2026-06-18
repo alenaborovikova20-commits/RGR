@@ -69,24 +69,10 @@ include CMakeFiles/gost.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/gost.dir/flags.make
 
-CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o: CMakeFiles/gost.dir/flags.make
-CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o: /home/ushaneva/Документы/prog/RGR/algorithms/gost/gost.cpp
-CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o: CMakeFiles/gost.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o -MF CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o.d -o CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o -c /home/ushaneva/Документы/prog/RGR/algorithms/gost/gost.cpp
-
-CMakeFiles/gost.dir/algorithms/gost/gost.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/gost.dir/algorithms/gost/gost.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/algorithms/gost/gost.cpp > CMakeFiles/gost.dir/algorithms/gost/gost.cpp.i
-
-CMakeFiles/gost.dir/algorithms/gost/gost.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/gost.dir/algorithms/gost/gost.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/algorithms/gost/gost.cpp -o CMakeFiles/gost.dir/algorithms/gost/gost.cpp.s
-
 CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.o: CMakeFiles/gost.dir/flags.make
 CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.o: /home/ushaneva/Документы/prog/RGR/algorithms/gost/export_gost.cpp
 CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.o: CMakeFiles/gost.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.o -MF CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.o.d -o CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.o -c /home/ushaneva/Документы/prog/RGR/algorithms/gost/export_gost.cpp
 
 CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.i: cmake_force
@@ -97,23 +83,37 @@ CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/algorithms/gost/export_gost.cpp -o CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.s
 
+CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o: CMakeFiles/gost.dir/flags.make
+CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o: /home/ushaneva/Документы/prog/RGR/algorithms/gost/gost.cpp
+CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o: CMakeFiles/gost.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o -MF CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o.d -o CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o -c /home/ushaneva/Документы/prog/RGR/algorithms/gost/gost.cpp
+
+CMakeFiles/gost.dir/algorithms/gost/gost.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/gost.dir/algorithms/gost/gost.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/algorithms/gost/gost.cpp > CMakeFiles/gost.dir/algorithms/gost/gost.cpp.i
+
+CMakeFiles/gost.dir/algorithms/gost/gost.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/gost.dir/algorithms/gost/gost.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/algorithms/gost/gost.cpp -o CMakeFiles/gost.dir/algorithms/gost/gost.cpp.s
+
 # Object files for target gost
 gost_OBJECTS = \
-"CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o" \
-"CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.o"
+"CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.o" \
+"CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o"
 
 # External object files for target gost
 gost_EXTERNAL_OBJECTS =
 
-libgost.so: CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o
-libgost.so: CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.o
-libgost.so: CMakeFiles/gost.dir/build.make
-libgost.so: CMakeFiles/gost.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared library libgost.so"
+/home/ushaneva/Документы/prog/RGR/plugins/libgost.so: CMakeFiles/gost.dir/algorithms/gost/export_gost.cpp.o
+/home/ushaneva/Документы/prog/RGR/plugins/libgost.so: CMakeFiles/gost.dir/algorithms/gost/gost.cpp.o
+/home/ushaneva/Документы/prog/RGR/plugins/libgost.so: CMakeFiles/gost.dir/build.make
+/home/ushaneva/Документы/prog/RGR/plugins/libgost.so: CMakeFiles/gost.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared library /home/ushaneva/Документы/prog/RGR/plugins/libgost.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/gost.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-CMakeFiles/gost.dir/build: libgost.so
+CMakeFiles/gost.dir/build: /home/ushaneva/Документы/prog/RGR/plugins/libgost.so
 .PHONY : CMakeFiles/gost.dir/build
 
 CMakeFiles/gost.dir/clean:

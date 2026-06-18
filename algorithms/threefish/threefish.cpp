@@ -40,7 +40,9 @@ static void permute(uint64_t* v) {
 }
 
 static void unpermute(uint64_t* v) {
-    permute(v);
+    uint64_t tmp;
+    tmp = v[1]; v[1] = v[3]; v[3] = tmp;
+    tmp = v[5]; v[5] = v[7]; v[7] = tmp;
 }
 
 void threefish_key_schedule(const uint64_t* key, const uint64_t* tweak, uint64_t* round_keys) {
@@ -61,27 +63,27 @@ void threefish_key_schedule(const uint64_t* key, const uint64_t* tweak, uint64_t
             case 0:
                 round_keys[r * 8 + 0] = K[(s + 0) % 9];
                 round_keys[r * 8 + 1] = K[(s + 1) % 9];
-                round_keys[r * 8 + 2] = T[0];
-                round_keys[r * 8 + 3] = T[1];
+                round_keys[r * 8 + 2] = T[(s + 0) % 3];
+                round_keys[r * 8 + 3] = T[(s + 1) % 3];
                 for (int i = 4; i < 8; i++) round_keys[r * 8 + i] = 0;
                 break;
             case 1:
                 round_keys[r * 8 + 0] = K[(s + 2) % 9];
                 round_keys[r * 8 + 1] = K[(s + 3) % 9];
-                round_keys[r * 8 + 2] = T[2];
+                round_keys[r * 8 + 2] = T[(s + 2) % 3];
                 for (int i = 3; i < 8; i++) round_keys[r * 8 + i] = 0;
                 break;
             case 2:
                 round_keys[r * 8 + 0] = K[(s + 4) % 9];
                 round_keys[r * 8 + 1] = K[(s + 5) % 9];
-                round_keys[r * 8 + 2] = T[0];
-                round_keys[r * 8 + 3] = T[1];
+                round_keys[r * 8 + 2] = T[(s + 0) % 3];
+                round_keys[r * 8 + 3] = T[(s + 1) % 3];
                 for (int i = 4; i < 8; i++) round_keys[r * 8 + i] = 0;
                 break;
             case 3:
                 round_keys[r * 8 + 0] = K[(s + 6) % 9];
                 round_keys[r * 8 + 1] = K[(s + 7) % 9];
-                round_keys[r * 8 + 2] = T[2];
+                round_keys[r * 8 + 2] = T[(s + 2) % 3];
                 for (int i = 3; i < 8; i++) round_keys[r * 8 + i] = 0;
                 break;
         }

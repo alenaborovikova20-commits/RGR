@@ -148,7 +148,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=Cryptum
+CMAKE_PROJECT_NAME:STATIC=CryptumApp
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -216,13 +216,13 @@ CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
-Cryptum_BINARY_DIR:STATIC=/home/ushaneva/Документы/prog/RGR/build
+CryptumApp_BINARY_DIR:STATIC=/home/ushaneva/Документы/prog/RGR/build
 
 //Value Computed by CMake
-Cryptum_IS_TOP_LEVEL:STATIC=ON
+CryptumApp_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
-Cryptum_SOURCE_DIR:STATIC=/home/ushaneva/Документы/prog/RGR
+CryptumApp_SOURCE_DIR:STATIC=/home/ushaneva/Документы/prog/RGR
 
 
 ########################

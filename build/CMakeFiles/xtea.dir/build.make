@@ -69,24 +69,10 @@ include CMakeFiles/xtea.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/xtea.dir/flags.make
 
-CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o: CMakeFiles/xtea.dir/flags.make
-CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o: /home/ushaneva/Документы/prog/RGR/algorithms/xtea/xtea.cpp
-CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o: CMakeFiles/xtea.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o -MF CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o.d -o CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o -c /home/ushaneva/Документы/prog/RGR/algorithms/xtea/xtea.cpp
-
-CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/algorithms/xtea/xtea.cpp > CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.i
-
-CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/algorithms/xtea/xtea.cpp -o CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.s
-
 CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.o: CMakeFiles/xtea.dir/flags.make
 CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.o: /home/ushaneva/Документы/prog/RGR/algorithms/xtea/export_xtea.cpp
 CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.o: CMakeFiles/xtea.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.o -MF CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.o.d -o CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.o -c /home/ushaneva/Документы/prog/RGR/algorithms/xtea/export_xtea.cpp
 
 CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.i: cmake_force
@@ -97,23 +83,37 @@ CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/algorithms/xtea/export_xtea.cpp -o CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.s
 
+CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o: CMakeFiles/xtea.dir/flags.make
+CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o: /home/ushaneva/Документы/prog/RGR/algorithms/xtea/xtea.cpp
+CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o: CMakeFiles/xtea.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o -MF CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o.d -o CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o -c /home/ushaneva/Документы/prog/RGR/algorithms/xtea/xtea.cpp
+
+CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/algorithms/xtea/xtea.cpp > CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.i
+
+CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/algorithms/xtea/xtea.cpp -o CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.s
+
 # Object files for target xtea
 xtea_OBJECTS = \
-"CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o" \
-"CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.o"
+"CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.o" \
+"CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o"
 
 # External object files for target xtea
 xtea_EXTERNAL_OBJECTS =
 
-libxtea.so: CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o
-libxtea.so: CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.o
-libxtea.so: CMakeFiles/xtea.dir/build.make
-libxtea.so: CMakeFiles/xtea.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared library libxtea.so"
+/home/ushaneva/Документы/prog/RGR/plugins/libxtea.so: CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.o
+/home/ushaneva/Документы/prog/RGR/plugins/libxtea.so: CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o
+/home/ushaneva/Документы/prog/RGR/plugins/libxtea.so: CMakeFiles/xtea.dir/build.make
+/home/ushaneva/Документы/prog/RGR/plugins/libxtea.so: CMakeFiles/xtea.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared library /home/ushaneva/Документы/prog/RGR/plugins/libxtea.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/xtea.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-CMakeFiles/xtea.dir/build: libxtea.so
+CMakeFiles/xtea.dir/build: /home/ushaneva/Документы/prog/RGR/plugins/libxtea.so
 .PHONY : CMakeFiles/xtea.dir/build
 
 CMakeFiles/xtea.dir/clean:

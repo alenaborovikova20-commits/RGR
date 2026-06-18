@@ -1,10 +1,10 @@
 file(REMOVE_RECURSE
+  "/home/ushaneva/Документы/prog/RGR/plugins/libxtea.pdb"
+  "/home/ushaneva/Документы/prog/RGR/plugins/libxtea.so"
   "CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.o"
   "CMakeFiles/xtea.dir/algorithms/xtea/export_xtea.cpp.o.d"
   "CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o"
   "CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.o.d"
-  "libxtea.pdb"
-  "libxtea.so"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -1,30 +1,63 @@
 cmake_minimum_required(VERSION 3.10)
-project(Cryptum)
+project(CryptumApp)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -fPIC")
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories(include)
-include_directories(src)
+# ===== КУДА КЛАДЁМ ФАЙЛЫ =====
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/plugins)
 
-add_library(rc5 SHARED algorithms/RC5/rc5.cpp algorithms/RC5/export_rc5.cpp)
-target_include_directories(rc5 PRIVATE algorithms/RC5)
+# ===== ОСНОВНОЕ ПРИЛОЖЕНИЕ =====
+add_executable(cryptum
+    src/cryptum.cpp
+    src/main.cpp
+)
 
-add_library(threefish SHARED algorithms/threefish/threefish.cpp algorithms/threefish/export_threefish.cpp)
-target_include_directories(threefish PRIVATE algorithms/threefish)
+target_include_directories(cryptum PRIVATE
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/include
+)
 
-add_library(xtea SHARED algorithms/xtea/xtea.cpp algorithms/xtea/export_xtea.cpp)
-target_include_directories(xtea PRIVATE algorithms/xtea)
+target_link_libraries(cryptum PRIVATE dl)
 
-add_library(gost SHARED algorithms/gost/gost.cpp algorithms/gost/export_gost.cpp)
-target_include_directories(gost PRIVATE algorithms/gost)
+# ===== ПЛАГИНЫ =====
+function(add_crypto_plugin NAME)
+    file(GLOB SOURCES "algorithms/${NAME}/*.cpp")
+    if(NOT SOURCES)
+        message(WARNING "Не найдены файлы для алгоритма: ${NAME}")
+        return()
+    endif()
+    add_library(${NAME} SHARED ${SOURCES})
+    target_include_directories(${NAME} PRIVATE
+        ${CMAKE_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/algorithms/${NAME}
+        ${CMAKE_SOURCE_DIR}/include
+    )
+    set_target_properties(${NAME} PROPERTIES
+        PREFIX "lib"
+        SUFFIX ".so"
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/plugins
+    )
+endfunction()
 
-add_library(gm SHARED algorithms/gm/gm.cpp algorithms/gm/export_gm.cpp)
-target_include_directories(gm PRIVATE algorithms/gm)
-
-add_library(mo SHARED algorithms/mo/mo.cpp algorithms/mo/export_mo.cpp)
-target_include_directories(mo PRIVATE algorithms/mo)
-
-add_executable(cryptum src/main.cpp src/cryptum.cpp)
-target_link_libraries(cryptum dl)
-target_include_directories(cryptum PRIVATE src)
+add_crypto_plugin(rc5)
+add_crypto_plugin(threefish)
+add_crypto_plugin(xtea)
+add_crypto_plugin(gost)
+add_crypto_plugin(gm)
+add_library(blowfish SHARED
+    algorithms/blowfish/export_blowfish.cpp
+    algorithms/blowfish/blowfish.cpp
+)
+target_include_directories(blowfish PRIVATE
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/algorithms/blowfish
+    ${CMAKE_SOURCE_DIR}/include
+)
+set_target_properties(blowfish PROPERTIES
+    PREFIX "lib"
+    SUFFIX ".so"
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/plugins
+)

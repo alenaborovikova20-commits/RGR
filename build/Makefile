@@ -117,6 +117,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named cryptum
+
+# Build rule for target.
+cryptum: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cryptum
+.PHONY : cryptum
+
+# fast build rule for target.
+cryptum/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/build
+.PHONY : cryptum/fast
+
+#=============================================================================
 # Target rules for targets named rc5
 
 # Build rule for target.
@@ -182,78 +195,65 @@ gm/fast:
 .PHONY : gm/fast
 
 #=============================================================================
-# Target rules for targets named mo
+# Target rules for targets named blowfish
 
 # Build rule for target.
-mo: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mo
-.PHONY : mo
+blowfish: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 blowfish
+.PHONY : blowfish
 
 # fast build rule for target.
-mo/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mo.dir/build.make CMakeFiles/mo.dir/build
-.PHONY : mo/fast
+blowfish/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/blowfish.dir/build.make CMakeFiles/blowfish.dir/build
+.PHONY : blowfish/fast
 
-#=============================================================================
-# Target rules for targets named cryptum
-
-# Build rule for target.
-cryptum: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cryptum
-.PHONY : cryptum
-
-# fast build rule for target.
-cryptum/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/build
-.PHONY : cryptum/fast
-
-algorithms/RC5/export_rc5.o: algorithms/RC5/export_rc5.cpp.o
-.PHONY : algorithms/RC5/export_rc5.o
+algorithms/blowfish/blowfish.o: algorithms/blowfish/blowfish.cpp.o
+.PHONY : algorithms/blowfish/blowfish.o
 
 # target to build an object file
-algorithms/RC5/export_rc5.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rc5.dir/build.make CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.o
-.PHONY : algorithms/RC5/export_rc5.cpp.o
+algorithms/blowfish/blowfish.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/blowfish.dir/build.make CMakeFiles/blowfish.dir/algorithms/blowfish/blowfish.cpp.o
+.PHONY : algorithms/blowfish/blowfish.cpp.o
 
-algorithms/RC5/export_rc5.i: algorithms/RC5/export_rc5.cpp.i
-.PHONY : algorithms/RC5/export_rc5.i
+algorithms/blowfish/blowfish.i: algorithms/blowfish/blowfish.cpp.i
+.PHONY : algorithms/blowfish/blowfish.i
 
 # target to preprocess a source file
-algorithms/RC5/export_rc5.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rc5.dir/build.make CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.i
-.PHONY : algorithms/RC5/export_rc5.cpp.i
+algorithms/blowfish/blowfish.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/blowfish.dir/build.make CMakeFiles/blowfish.dir/algorithms/blowfish/blowfish.cpp.i
+.PHONY : algorithms/blowfish/blowfish.cpp.i
 
-algorithms/RC5/export_rc5.s: algorithms/RC5/export_rc5.cpp.s
-.PHONY : algorithms/RC5/export_rc5.s
+algorithms/blowfish/blowfish.s: algorithms/blowfish/blowfish.cpp.s
+.PHONY : algorithms/blowfish/blowfish.s
 
 # target to generate assembly for a file
-algorithms/RC5/export_rc5.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rc5.dir/build.make CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.s
-.PHONY : algorithms/RC5/export_rc5.cpp.s
+algorithms/blowfish/blowfish.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/blowfish.dir/build.make CMakeFiles/blowfish.dir/algorithms/blowfish/blowfish.cpp.s
+.PHONY : algorithms/blowfish/blowfish.cpp.s
 
-algorithms/RC5/rc5.o: algorithms/RC5/rc5.cpp.o
-.PHONY : algorithms/RC5/rc5.o
+algorithms/blowfish/export_blowfish.o: algorithms/blowfish/export_blowfish.cpp.o
+.PHONY : algorithms/blowfish/export_blowfish.o
 
 # target to build an object file
-algorithms/RC5/rc5.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rc5.dir/build.make CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.o
-.PHONY : algorithms/RC5/rc5.cpp.o
+algorithms/blowfish/export_blowfish.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/blowfish.dir/build.make CMakeFiles/blowfish.dir/algorithms/blowfish/export_blowfish.cpp.o
+.PHONY : algorithms/blowfish/export_blowfish.cpp.o
 
-algorithms/RC5/rc5.i: algorithms/RC5/rc5.cpp.i
-.PHONY : algorithms/RC5/rc5.i
+algorithms/blowfish/export_blowfish.i: algorithms/blowfish/export_blowfish.cpp.i
+.PHONY : algorithms/blowfish/export_blowfish.i
 
 # target to preprocess a source file
-algorithms/RC5/rc5.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rc5.dir/build.make CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.i
-.PHONY : algorithms/RC5/rc5.cpp.i
+algorithms/blowfish/export_blowfish.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/blowfish.dir/build.make CMakeFiles/blowfish.dir/algorithms/blowfish/export_blowfish.cpp.i
+.PHONY : algorithms/blowfish/export_blowfish.cpp.i
 
-algorithms/RC5/rc5.s: algorithms/RC5/rc5.cpp.s
-.PHONY : algorithms/RC5/rc5.s
+algorithms/blowfish/export_blowfish.s: algorithms/blowfish/export_blowfish.cpp.s
+.PHONY : algorithms/blowfish/export_blowfish.s
 
 # target to generate assembly for a file
-algorithms/RC5/rc5.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rc5.dir/build.make CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.s
-.PHONY : algorithms/RC5/rc5.cpp.s
+algorithms/blowfish/export_blowfish.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/blowfish.dir/build.make CMakeFiles/blowfish.dir/algorithms/blowfish/export_blowfish.cpp.s
+.PHONY : algorithms/blowfish/export_blowfish.cpp.s
 
 algorithms/gm/export_gm.o: algorithms/gm/export_gm.cpp.o
 .PHONY : algorithms/gm/export_gm.o
@@ -351,53 +351,53 @@ algorithms/gost/gost.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gost.dir/build.make CMakeFiles/gost.dir/algorithms/gost/gost.cpp.s
 .PHONY : algorithms/gost/gost.cpp.s
 
-algorithms/mo/export_mo.o: algorithms/mo/export_mo.cpp.o
-.PHONY : algorithms/mo/export_mo.o
+algorithms/rc5/export_rc5.o: algorithms/rc5/export_rc5.cpp.o
+.PHONY : algorithms/rc5/export_rc5.o
 
 # target to build an object file
-algorithms/mo/export_mo.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mo.dir/build.make CMakeFiles/mo.dir/algorithms/mo/export_mo.cpp.o
-.PHONY : algorithms/mo/export_mo.cpp.o
+algorithms/rc5/export_rc5.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rc5.dir/build.make CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.o
+.PHONY : algorithms/rc5/export_rc5.cpp.o
 
-algorithms/mo/export_mo.i: algorithms/mo/export_mo.cpp.i
-.PHONY : algorithms/mo/export_mo.i
+algorithms/rc5/export_rc5.i: algorithms/rc5/export_rc5.cpp.i
+.PHONY : algorithms/rc5/export_rc5.i
 
 # target to preprocess a source file
-algorithms/mo/export_mo.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mo.dir/build.make CMakeFiles/mo.dir/algorithms/mo/export_mo.cpp.i
-.PHONY : algorithms/mo/export_mo.cpp.i
+algorithms/rc5/export_rc5.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rc5.dir/build.make CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.i
+.PHONY : algorithms/rc5/export_rc5.cpp.i
 
-algorithms/mo/export_mo.s: algorithms/mo/export_mo.cpp.s
-.PHONY : algorithms/mo/export_mo.s
+algorithms/rc5/export_rc5.s: algorithms/rc5/export_rc5.cpp.s
+.PHONY : algorithms/rc5/export_rc5.s
 
 # target to generate assembly for a file
-algorithms/mo/export_mo.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mo.dir/build.make CMakeFiles/mo.dir/algorithms/mo/export_mo.cpp.s
-.PHONY : algorithms/mo/export_mo.cpp.s
+algorithms/rc5/export_rc5.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rc5.dir/build.make CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.s
+.PHONY : algorithms/rc5/export_rc5.cpp.s
 
-algorithms/mo/mo.o: algorithms/mo/mo.cpp.o
-.PHONY : algorithms/mo/mo.o
+algorithms/rc5/rc5.o: algorithms/rc5/rc5.cpp.o
+.PHONY : algorithms/rc5/rc5.o
 
 # target to build an object file
-algorithms/mo/mo.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mo.dir/build.make CMakeFiles/mo.dir/algorithms/mo/mo.cpp.o
-.PHONY : algorithms/mo/mo.cpp.o
+algorithms/rc5/rc5.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rc5.dir/build.make CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.o
+.PHONY : algorithms/rc5/rc5.cpp.o
 
-algorithms/mo/mo.i: algorithms/mo/mo.cpp.i
-.PHONY : algorithms/mo/mo.i
+algorithms/rc5/rc5.i: algorithms/rc5/rc5.cpp.i
+.PHONY : algorithms/rc5/rc5.i
 
 # target to preprocess a source file
-algorithms/mo/mo.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mo.dir/build.make CMakeFiles/mo.dir/algorithms/mo/mo.cpp.i
-.PHONY : algorithms/mo/mo.cpp.i
+algorithms/rc5/rc5.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rc5.dir/build.make CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.i
+.PHONY : algorithms/rc5/rc5.cpp.i
 
-algorithms/mo/mo.s: algorithms/mo/mo.cpp.s
-.PHONY : algorithms/mo/mo.s
+algorithms/rc5/rc5.s: algorithms/rc5/rc5.cpp.s
+.PHONY : algorithms/rc5/rc5.s
 
 # target to generate assembly for a file
-algorithms/mo/mo.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mo.dir/build.make CMakeFiles/mo.dir/algorithms/mo/mo.cpp.s
-.PHONY : algorithms/mo/mo.cpp.s
+algorithms/rc5/rc5.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rc5.dir/build.make CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.s
+.PHONY : algorithms/rc5/rc5.cpp.s
 
 algorithms/threefish/export_threefish.o: algorithms/threefish/export_threefish.cpp.o
 .PHONY : algorithms/threefish/export_threefish.o
@@ -551,19 +551,19 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... blowfish"
 	@echo "... cryptum"
 	@echo "... gm"
 	@echo "... gost"
-	@echo "... mo"
 	@echo "... rc5"
 	@echo "... threefish"
 	@echo "... xtea"
-	@echo "... algorithms/RC5/export_rc5.o"
-	@echo "... algorithms/RC5/export_rc5.i"
-	@echo "... algorithms/RC5/export_rc5.s"
-	@echo "... algorithms/RC5/rc5.o"
-	@echo "... algorithms/RC5/rc5.i"
-	@echo "... algorithms/RC5/rc5.s"
+	@echo "... algorithms/blowfish/blowfish.o"
+	@echo "... algorithms/blowfish/blowfish.i"
+	@echo "... algorithms/blowfish/blowfish.s"
+	@echo "... algorithms/blowfish/export_blowfish.o"
+	@echo "... algorithms/blowfish/export_blowfish.i"
+	@echo "... algorithms/blowfish/export_blowfish.s"
 	@echo "... algorithms/gm/export_gm.o"
 	@echo "... algorithms/gm/export_gm.i"
 	@echo "... algorithms/gm/export_gm.s"
@@ -576,12 +576,12 @@ help:
 	@echo "... algorithms/gost/gost.o"
 	@echo "... algorithms/gost/gost.i"
 	@echo "... algorithms/gost/gost.s"
-	@echo "... algorithms/mo/export_mo.o"
-	@echo "... algorithms/mo/export_mo.i"
-	@echo "... algorithms/mo/export_mo.s"
-	@echo "... algorithms/mo/mo.o"
-	@echo "... algorithms/mo/mo.i"
-	@echo "... algorithms/mo/mo.s"
+	@echo "... algorithms/rc5/export_rc5.o"
+	@echo "... algorithms/rc5/export_rc5.i"
+	@echo "... algorithms/rc5/export_rc5.s"
+	@echo "... algorithms/rc5/rc5.o"
+	@echo "... algorithms/rc5/rc5.i"
+	@echo "... algorithms/rc5/rc5.s"
 	@echo "... algorithms/threefish/export_threefish.o"
 	@echo "... algorithms/threefish/export_threefish.i"
 	@echo "... algorithms/threefish/export_threefish.s"

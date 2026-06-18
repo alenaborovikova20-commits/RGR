@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -Drc5_EXPORTS
 
-CXX_INCLUDES = -I/home/ushaneva/Документы/prog/RGR/include -I/home/ushaneva/Документы/prog/RGR/src -I/home/ushaneva/Документы/prog/RGR/algorithms/RC5
+CXX_INCLUDES = -I/home/ushaneva/Документы/prog/RGR -I/home/ushaneva/Документы/prog/RGR/algorithms/rc5 -I/home/ushaneva/Документы/prog/RGR/include
 
-CXX_FLAGS =  -Wall -Wextra -fPIC -std=gnu++17 -fPIC
+CXX_FLAGS = -std=gnu++17 -fPIC
 

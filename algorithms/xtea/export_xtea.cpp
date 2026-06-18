@@ -1,5 +1,4 @@
 #include "crypto_abi.h"
-#include "secure_memory.h"
 #include "xtea.h"
 #include <cstring>
 #include <random>
@@ -119,7 +118,7 @@ int encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
     }
     
     output->size = total;
-    
+
     //затираем ключ в памяти (безопасность)
     
     return 0;
@@ -170,7 +169,6 @@ int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
     }
     
     output->size = real_length;
-    
     // Затираем ключ
     
     return 0;

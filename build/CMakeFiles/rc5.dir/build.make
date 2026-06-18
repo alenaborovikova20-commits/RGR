@@ -69,51 +69,51 @@ include CMakeFiles/rc5.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/rc5.dir/flags.make
 
-CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.o: CMakeFiles/rc5.dir/flags.make
-CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.o: /home/ushaneva/Документы/prog/RGR/algorithms/RC5/rc5.cpp
-CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.o: CMakeFiles/rc5.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.o -MF CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.o.d -o CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.o -c /home/ushaneva/Документы/prog/RGR/algorithms/RC5/rc5.cpp
+CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.o: CMakeFiles/rc5.dir/flags.make
+CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.o: /home/ushaneva/Документы/prog/RGR/algorithms/rc5/export_rc5.cpp
+CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.o: CMakeFiles/rc5.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.o -MF CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.o.d -o CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.o -c /home/ushaneva/Документы/prog/RGR/algorithms/rc5/export_rc5.cpp
 
-CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/algorithms/RC5/rc5.cpp > CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.i
+CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/algorithms/rc5/export_rc5.cpp > CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.i
 
-CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/algorithms/RC5/rc5.cpp -o CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.s
+CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/algorithms/rc5/export_rc5.cpp -o CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.s
 
-CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.o: CMakeFiles/rc5.dir/flags.make
-CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.o: /home/ushaneva/Документы/prog/RGR/algorithms/RC5/export_rc5.cpp
-CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.o: CMakeFiles/rc5.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.o -MF CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.o.d -o CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.o -c /home/ushaneva/Документы/prog/RGR/algorithms/RC5/export_rc5.cpp
+CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.o: CMakeFiles/rc5.dir/flags.make
+CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.o: /home/ushaneva/Документы/prog/RGR/algorithms/rc5/rc5.cpp
+CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.o: CMakeFiles/rc5.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.o -MF CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.o.d -o CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.o -c /home/ushaneva/Документы/prog/RGR/algorithms/rc5/rc5.cpp
 
-CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/algorithms/RC5/export_rc5.cpp > CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.i
+CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/algorithms/rc5/rc5.cpp > CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.i
 
-CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/algorithms/RC5/export_rc5.cpp -o CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.s
+CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/algorithms/rc5/rc5.cpp -o CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.s
 
 # Object files for target rc5
 rc5_OBJECTS = \
-"CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.o" \
-"CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.o"
+"CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.o" \
+"CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.o"
 
 # External object files for target rc5
 rc5_EXTERNAL_OBJECTS =
 
-librc5.so: CMakeFiles/rc5.dir/algorithms/RC5/rc5.cpp.o
-librc5.so: CMakeFiles/rc5.dir/algorithms/RC5/export_rc5.cpp.o
-librc5.so: CMakeFiles/rc5.dir/build.make
-librc5.so: CMakeFiles/rc5.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared library librc5.so"
+/home/ushaneva/Документы/prog/RGR/plugins/librc5.so: CMakeFiles/rc5.dir/algorithms/rc5/export_rc5.cpp.o
+/home/ushaneva/Документы/prog/RGR/plugins/librc5.so: CMakeFiles/rc5.dir/algorithms/rc5/rc5.cpp.o
+/home/ushaneva/Документы/prog/RGR/plugins/librc5.so: CMakeFiles/rc5.dir/build.make
+/home/ushaneva/Документы/prog/RGR/plugins/librc5.so: CMakeFiles/rc5.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared library /home/ushaneva/Документы/prog/RGR/plugins/librc5.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/rc5.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-CMakeFiles/rc5.dir/build: librc5.so
+CMakeFiles/rc5.dir/build: /home/ushaneva/Документы/prog/RGR/plugins/librc5.so
 .PHONY : CMakeFiles/rc5.dir/build
 
 CMakeFiles/rc5.dir/clean:

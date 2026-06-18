@@ -69,24 +69,10 @@ include CMakeFiles/threefish.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/threefish.dir/flags.make
 
-CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o: CMakeFiles/threefish.dir/flags.make
-CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o: /home/ushaneva/Документы/prog/RGR/algorithms/threefish/threefish.cpp
-CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o: CMakeFiles/threefish.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o -MF CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o.d -o CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o -c /home/ushaneva/Документы/prog/RGR/algorithms/threefish/threefish.cpp
-
-CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/algorithms/threefish/threefish.cpp > CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.i
-
-CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/algorithms/threefish/threefish.cpp -o CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.s
-
 CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.o: CMakeFiles/threefish.dir/flags.make
 CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.o: /home/ushaneva/Документы/prog/RGR/algorithms/threefish/export_threefish.cpp
 CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.o: CMakeFiles/threefish.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.o -MF CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.o.d -o CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.o -c /home/ushaneva/Документы/prog/RGR/algorithms/threefish/export_threefish.cpp
 
 CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.i: cmake_force
@@ -97,23 +83,37 @@ CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.s: cmake_forc
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/algorithms/threefish/export_threefish.cpp -o CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.s
 
+CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o: CMakeFiles/threefish.dir/flags.make
+CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o: /home/ushaneva/Документы/prog/RGR/algorithms/threefish/threefish.cpp
+CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o: CMakeFiles/threefish.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o -MF CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o.d -o CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o -c /home/ushaneva/Документы/prog/RGR/algorithms/threefish/threefish.cpp
+
+CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/algorithms/threefish/threefish.cpp > CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.i
+
+CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/algorithms/threefish/threefish.cpp -o CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.s
+
 # Object files for target threefish
 threefish_OBJECTS = \
-"CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o" \
-"CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.o"
+"CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.o" \
+"CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o"
 
 # External object files for target threefish
 threefish_EXTERNAL_OBJECTS =
 
-libthreefish.so: CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o
-libthreefish.so: CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.o
-libthreefish.so: CMakeFiles/threefish.dir/build.make
-libthreefish.so: CMakeFiles/threefish.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared library libthreefish.so"
+/home/ushaneva/Документы/prog/RGR/plugins/libthreefish.so: CMakeFiles/threefish.dir/algorithms/threefish/export_threefish.cpp.o
+/home/ushaneva/Документы/prog/RGR/plugins/libthreefish.so: CMakeFiles/threefish.dir/algorithms/threefish/threefish.cpp.o
+/home/ushaneva/Документы/prog/RGR/plugins/libthreefish.so: CMakeFiles/threefish.dir/build.make
+/home/ushaneva/Документы/prog/RGR/plugins/libthreefish.so: CMakeFiles/threefish.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared library /home/ushaneva/Документы/prog/RGR/plugins/libthreefish.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/threefish.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-CMakeFiles/threefish.dir/build: libthreefish.so
+CMakeFiles/threefish.dir/build: /home/ushaneva/Документы/prog/RGR/plugins/libthreefish.so
 .PHONY : CMakeFiles/threefish.dir/build
 
 CMakeFiles/threefish.dir/clean:
