@@ -160,38 +160,32 @@ std::vector<uint8_t> CryptumApp::encrypt_data(CryptoPlugin* plugin,
     std::vector<uint8_t> result;
     
     if (is_asym) {
-        // АСИММЕТРИЧНОЕ ШИФРОВАНИЕ (Goldwasser-Micali, Massey-Omura)
-        // Ключ передаём как строку (плагин ожидает формат "n,e" или "PUB:n,e")
-        std::string key_str = bytes_to_string(key);
-        std::vector<uint8_t> key_bytes(key_str.begin(), key_str.end());
+        ConstBuffer key_buf = {key.data(), key.size()};
+        ConstBuffer in_buf = {data.data(), data.size()};
         
-        // Каждый байт → биты → шифруем каждый бит
-        for (size_t i = 0; i < data.size(); ++i) {
-            uint8_t byte = data[i];
-            // От старшего бита к младшему
-            for (int bit_pos = 7; bit_pos >= 0; --bit_pos) {
-                int bit = (byte >> bit_pos) & 1;
-                uint64_t val = bit; // 0 или 1
-                
-                ConstBuffer key_buf = {key_bytes.data(), key_bytes.size()};
-                ConstBuffer in_buf = {reinterpret_cast<const uint8_t*>(&val), sizeof(val)};
-                
-                size_t out_size = plugin->get_out_size(in_buf.size, 1);
-                if (out_size == 0) out_size = 8;
-                
-                std::vector<uint8_t> out_buf_data(out_size);
-                MutBuffer out_buf = {out_buf_data.data(), out_buf_data.size()};
-                
-                int ret = plugin->encrypt(key_buf, in_buf, &out_buf);
-                if (ret != 0) {
-                    throw std::runtime_error("Ошибка асимметричного шифрования: код " + std::to_string(ret));
-                }
-                out_buf_data.resize(out_buf.size);
-                result.insert(result.end(), out_buf_data.begin(), out_buf_data.end());
+        // Для MO и GM используем get_out_size
+        size_t out_size = plugin->get_out_size(data.size(), 1);
+        if (out_size == 0) {
+            if (plugin->name == "Massey-Omura") {
+                out_size = data.size() * sizeof(int64_t);
+            } else {
+                out_size = data.size() * 8 * sizeof(int64_t);
             }
         }
+        
+        std::vector<uint8_t> out_buf_data(out_size);
+        MutBuffer out_buf = {out_buf_data.data(), out_buf_data.size()};
+        
+        int ret = plugin->encrypt(key_buf, in_buf, &out_buf);
+        if (ret != 0) {
+            throw std::runtime_error("Ошибка асимметричного шифрования: код " + std::to_string(ret));
+        }
+        
+        out_buf_data.resize(out_buf.size);
+        result = out_buf_data;
+        
     } else {
-        // СИММЕТРИЧНОЕ ШИФРОВАНИЕ (RC5, Threefish, XTEA, ГОСТ)
+        // Симметричное шифрование
         size_t out_size = plugin->get_out_size(data.size(), 1);
         if (out_size == 0 || out_size < data.size()) {
             out_size = data.size() * 2 + 1024;
@@ -212,8 +206,6 @@ std::vector<uint8_t> CryptumApp::encrypt_data(CryptoPlugin* plugin,
     return result;
 }
 
-// ==================== РАСШИФРОВАНИЕ (ВСЕ АЛГОРИТМЫ) ====================
-
 std::vector<uint8_t> CryptumApp::decrypt_data(CryptoPlugin* plugin,
                                                const std::vector<uint8_t>& key,
                                                const std::vector<uint8_t>& data) {
@@ -223,64 +215,26 @@ std::vector<uint8_t> CryptumApp::decrypt_data(CryptoPlugin* plugin,
     std::vector<uint8_t> result;
     
     if (is_asym) {
-        // АСИММЕТРИЧНОЕ РАСШИФРОВАНИЕ (Goldwasser-Micali, Massey-Omura)
-        std::string key_str = bytes_to_string(key);
-        std::vector<uint8_t> key_bytes(key_str.begin(), key_str.end());
+        ConstBuffer key_buf = {key.data(), key.size()};
         
-        // Определяем размер блока — каждый зашифрованный бит
-        size_t block_size = 8; // по умолчанию 8 байт на бит
+        // ===== ДЛЯ GM И MO: ПЕРЕДАЁМ ВСЁ СРАЗУ! =====
+        // Не режем на блоки, а передаём целиком
+        size_t out_size = data.size() * 4 + 4096;  // С запасом
+        std::vector<uint8_t> out_buf_data(out_size);
+        MutBuffer out_buf = {out_buf_data.data(), out_buf_data.size()};
+        ConstBuffer in_buf = {data.data(), data.size()};
         
-        // Пробуем определить реальный размер блока
-        if (data.size() % 16 == 0 && data.size() > 0) {
-            block_size = 16;
-        } else if (data.size() % 8 == 0 && data.size() > 0) {
-            block_size = 8;
-        } else {
-            for (size_t test = 4; test <= 32; ++test) {
-                if (data.size() % test == 0) {
-                    block_size = test;
-                    break;
-                }
-            }
+        int ret = plugin->decrypt(key_buf, in_buf, &out_buf);
+        if (ret != 0) {
+            throw std::runtime_error("Ошибка асимметричного расшифрования: код " + std::to_string(ret));
         }
         
-        std::vector<int> decrypted_bits;
-        decrypted_bits.reserve(data.size() / block_size);
+        out_buf_data.resize(out_buf.size);
+        result = out_buf_data;
         
-        for (size_t i = 0; i + block_size <= data.size(); i += block_size) {
-            ConstBuffer key_buf = {key_bytes.data(), key_bytes.size()};
-            ConstBuffer in_buf = {data.data() + i, block_size};
-            
-            size_t out_size = plugin->get_out_size(in_buf.size, 0);
-            if (out_size == 0) out_size = 8;
-            std::vector<uint8_t> out_buf_data(out_size);
-            MutBuffer out_buf = {out_buf_data.data(), out_buf_data.size()};
-            
-            int ret = plugin->decrypt(key_buf, in_buf, &out_buf);
-            if (ret != 0) {
-                throw std::runtime_error("Ошибка асимметричного расшифрования: код " + std::to_string(ret));
-            }
-            out_buf_data.resize(out_buf.size);
-            
-            // Получаем бит (0 или 1)
-            if (out_buf.size >= sizeof(uint64_t)) {
-                uint64_t val = 0;
-                memcpy(&val, out_buf_data.data(), sizeof(uint64_t));
-                decrypted_bits.push_back(static_cast<int>(val & 1));
-            }
-        }
-        
-        // Собираем биты обратно в байты
-        for (size_t i = 0; i < decrypted_bits.size(); i += 8) {
-            uint8_t byte = 0;
-            for (int j = 0; j < 8 && i + j < decrypted_bits.size(); ++j) {
-                byte = (byte << 1) | decrypted_bits[i + j];
-            }
-            result.push_back(byte);
-        }
     } else {
-        // СИММЕТРИЧНОЕ РАСШИФРОВАНИЕ (RC5, Threefish, XTEA, ГОСТ)
-        size_t out_size = data.size() * 4 + 4096; // Огромный буфер с запасом
+        // Симметричное расшифрование
+        size_t out_size = data.size() * 4 + 4096;
         std::vector<uint8_t> out_buf_data(out_size);
         MutBuffer out_buf = {out_buf_data.data(), out_buf_data.size()};
         ConstBuffer key_buf = {key.data(), key.size()};
@@ -331,6 +285,7 @@ void CryptumApp::handle_text() {
         // ===== ШИФРОВАНИЕ =====
         if (action == 1) {
             if (is_asym) {
+                
                 std::cout << "\n--- Асимметричный алгоритм ---\n";
                 std::cout << "1. Сгенерировать пару ключей (PUB + PRIV)\n";
                 std::cout << "2. Ввести публичный ключ (HEX)\n";
@@ -360,53 +315,47 @@ void CryptumApp::handle_text() {
                             throw std::runtime_error("Ошибка генерации ключей: " + std::to_string(result));
                         }
                         buffer.resize(out_size);
-                        std::string key_str = bytes_to_string(buffer);
-                        std::cout << "[OK] Сгенерирована пара ключей:\n" << key_str << std::endl;
                         
-                        size_t pub_pos = key_str.find("PUB:");
-                        size_t priv_pos = key_str.find("PRIV:");
-                        if (pub_pos != std::string::npos && priv_pos != std::string::npos) {
-                            std::string pub_part = key_str.substr(pub_pos + 4, priv_pos - pub_pos - 4);
-                            std::string priv_part = key_str.substr(priv_pos + 5);
-                            pub_key = string_to_bytes(pub_part);
-                            priv_key = string_to_bytes(priv_part);
+                        // ПРОСТО СОХРАНЯЕМ ВЕСЬ БУФЕР КАК КЛЮЧ!
+                        // GM возвращает 32 байта бинарных данных
+                        if (buffer.size() >= plugin->key_size) {
+                            pub_key.assign(buffer.data(), buffer.data() + plugin->key_size);
+                            priv_key.assign(buffer.data(), buffer.data() + plugin->key_size);
+                            // Для GM и MO публичный и приватный ключи — это одно и то же!
+                            // Но для совместимости сохраняем оба
                         } else {
-                            pub_key = buffer;
-                            priv_key = buffer;
+                            throw std::runtime_error("Сгенерирован ключ неправильного размера");
                         }
+                        
+                        std::cout << "[OK] Сгенерирована пара ключей." << std::endl;
+                        std::cout << "[INFO] Публичный ключ (HEX): " << bytes_to_hex(pub_key) << std::endl;
+                        std::cout << "[INFO] Приватный ключ сохранён в памяти." << std::endl;
+                        
                     } else {
+                        // fallback
                         pub_key = generate_random_key(plugin->key_size);
                         priv_key = generate_random_key(plugin->key_size);
                     }
-                } else if (choice == 2) {
-                    std::cout << "Введите публичный ключ (HEX): ";
-                    std::string hex_key;
-                    std::getline(std::cin, hex_key);
-                    pub_key = hex_to_bytes(hex_key);
-                } else {
-                    throw std::runtime_error("Неверный выбор");
+                    
+                    asym_keys.public_key = pub_key;
+                    asym_keys.private_key = priv_key;
+                    asym_keys.algorithm = plugin->name;
+                    asym_keys.is_asymmetric = true;
+                    last_key_pair = asym_keys;
+                    last_algorithm = plugin->name;
+                    last_is_asymmetric = true;
+                    
+                    // ШИФРУЕМ ПУБЛИЧНЫМ КЛЮЧОМ
+                    std::cout << "Введите текст: ";
+                    std::string text;
+                    std::getline(std::cin, text);
+                    auto data = string_to_bytes(text);
+                    
+                    auto result = encrypt_data(plugin, pub_key, data);
+                    last_ciphertext = result;
+                    last_plaintext = text;
+                    std::cout << "[OK] Шифротекст (HEX): " << bytes_to_hex(result) << std::endl;
                 }
-                
-                asym_keys.public_key = pub_key;
-                asym_keys.private_key = priv_key;
-                asym_keys.algorithm = plugin->name;
-                asym_keys.is_asymmetric = true;
-                last_key_pair = asym_keys;
-                last_algorithm = plugin->name;
-                last_is_asymmetric = true;
-                
-                std::cout << "[INFO] Публичный ключ (HEX): " << bytes_to_hex(pub_key) << std::endl;
-                std::cout << "[INFO] Приватный ключ сохранён в памяти." << std::endl;
-                
-                std::cout << "Введите текст: ";
-                std::string text;
-                std::getline(std::cin, text);
-                auto data = string_to_bytes(text);
-                
-                auto result = encrypt_data(plugin, pub_key, data);
-                last_ciphertext = result;
-                last_plaintext = text;
-                std::cout << "[OK] Шифротекст (HEX): " << bytes_to_hex(result) << std::endl;
                 
             } else {
                 std::cout << "\n--- Симметричный алгоритм ---\n";
@@ -480,10 +429,10 @@ void CryptumApp::handle_text() {
             bool has_key = false;
             
             if (is_asym) {
-                if (!last_key_pair.private_key.empty() && last_algorithm == plugin->name) {
+                    if (!last_key_pair.private_key.empty() && last_algorithm == plugin->name) {
                     has_key = true;
                     asym_keys = last_key_pair;
-                    key_for_decrypt = asym_keys.private_key;
+                    key_for_decrypt = asym_keys.public_key;      // ← ИСПОЛЬЗУЙ ЭТО!
                     std::cout << "[INFO] Найден сохранённый приватный ключ для " << plugin->name << std::endl;
                     std::cout << "Использовать сохранённый ключ? (y/n): ";
                     std::string answer;
@@ -645,8 +594,34 @@ void CryptumApp::handle_text() {
                 default:
                     throw std::runtime_error("Неверный выбор");
             }
-            
+            // В handle_text, перед decrypt_data:
+            std::cout << "[DEBUG] last_ciphertext.size() = " << last_ciphertext.size() << std::endl;
+            std::cout << "[DEBUG] last_ciphertext first 20 bytes: ";
+            for (size_t i = 0; i < (last_ciphertext.size() > 20 ? 20 : last_ciphertext.size()); i++) {
+                printf("%02x ", last_ciphertext[i]);
+            }
+            std::cout << std::endl;
             auto result = decrypt_data(plugin, key_for_decrypt, data);
+
+            // ===== ВЫВОДИМ ВСЁ В HEX =====
+            std::cout << "[DEBUG] result.size() = " << result.size() << std::endl;
+            std::cout << "[DEBUG] result HEX: ";
+            for (size_t i = 0; i < result.size(); i++) {
+                printf("%02x ", result[i]);
+            }
+            printf("\n");
+
+            // ===== ВЫВОДИМ КАК СТРОКУ (БЕЗ ОБРЕЗАНИЯ) =====
+            std::cout << "[OK] Расшифровано: ";
+            for (size_t i = 0; i < result.size(); i++) {
+                char c = result[i];
+                if (c >= 32 && c <= 126) {
+                    std::cout << c;
+                } else {
+                    std::cout << "\\x" << std::hex << (int)(unsigned char)c;
+                }
+            }
+            std::cout << std::endl;
             std::cout << "[OK] Расшифровано: " << bytes_to_string(result) << std::endl;
             last_plaintext = bytes_to_string(result);
         }
