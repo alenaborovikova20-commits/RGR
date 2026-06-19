@@ -122,6 +122,21 @@ CryptoPlugin* CryptumApp::select_plugin() {
 }
 
 // ==================== ОБЩИЕ ФУНКЦИИ ====================
+std::vector<uint8_t> string_to_key(const std::string& input, size_t key_size) {
+    std::vector<uint8_t> key(key_size, 0);
+    
+    // XOR-им все байты строки в ключ
+    for (size_t i = 0; i < input.size(); i++) {
+        key[i % key_size] ^= static_cast<uint8_t>(input[i]);
+    }
+    
+    // Добавляем перемешивание от размера строки
+    for (size_t i = 0; i < key_size; i++) {
+        key[i] ^= (input.size() >> (i % 4)) & 0xFF;
+    }
+    
+    return key;
+}
 
 std::vector<uint8_t> CryptumApp::read_file(const std::string& path) {
     if (!fs::exists(path)) {
@@ -212,6 +227,10 @@ std::vector<uint8_t> CryptumApp::encrypt_data(CryptoPlugin* plugin,
         out_buf_data.resize(out_buf.size);
         result = out_buf_data;
     }
+    printf("[DEBUG] encrypt key first 16 bytes: ");
+    for (int i=0; i<16; i++) printf("%02x ", key[i]);
+    printf("\n");
+
     
     return result;
 }
@@ -273,12 +292,12 @@ std::vector<uint8_t> CryptumApp::decrypt_data(CryptoPlugin* plugin,
 void CryptumApp::handle_text() {
     auto plugin = select_plugin();
     if (!plugin) return;
-    
+
     bool is_asym = is_asymmetric_algorithm(plugin->name);
-    
+
     std::cout << "\nФормат ключа: " << plugin->key_format_info << std::endl;
     std::cout << "1. Шифрование\n2. Дешифрование\n0. Назад\nВыбор: ";
-    
+
     int action;
     std::cin >> action;
     if (std::cin.fail()) {
@@ -288,27 +307,24 @@ void CryptumApp::handle_text() {
         return;
     }
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    
+
     if (action == 0) return;
     if (action != 1 && action != 2) {
         std::cerr << "[ERROR] Неверный выбор!" << std::endl;
         return;
     }
-    
+
     try {
         std::vector<uint8_t> key;
         KeyPair asym_keys;
-        
-        // ===== ШИФРОВАНИЕ =====
+
         if (action == 1) {
             if (is_asym) {
-                
-                std::cout << "\n--- Асимметричный алгоритм ---\n";
                 std::cout << "1. Сгенерировать пару ключей (PUB + PRIV)\n";
-                std::cout << "2. Ввести публичный ключ (HEX)\n";
+                std::cout << "2. Загрузить публичный ключ из файла\n";
                 std::cout << "0. Назад\n";
                 std::cout << "Выбор: ";
-                
+
                 int choice;
                 std::cin >> choice;
                 if (std::cin.fail()) {
@@ -317,11 +333,11 @@ void CryptumApp::handle_text() {
                     throw std::runtime_error("Введите число");
                 }
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                
+
                 if (choice == 0) return;
-                
+
                 std::vector<uint8_t> pub_key, priv_key;
-                
+
                 if (choice == 1) {
                     if (plugin->generate_key) {
                         size_t buf_size = 2048;
@@ -332,56 +348,63 @@ void CryptumApp::handle_text() {
                             throw std::runtime_error("Ошибка генерации ключей: " + std::to_string(result));
                         }
                         buffer.resize(out_size);
-                        
-                        // ПРОСТО СОХРАНЯЕМ ВЕСЬ БУФЕР КАК КЛЮЧ!
-                        // GM возвращает 32 байта бинарных данных
+
                         if (buffer.size() >= plugin->key_size) {
                             pub_key.assign(buffer.data(), buffer.data() + plugin->key_size);
                             priv_key.assign(buffer.data(), buffer.data() + plugin->key_size);
-                            // Для GM и MO публичный и приватный ключи — это одно и то же!
-                            // Но для совместимости сохраняем оба
                         } else {
                             throw std::runtime_error("Сгенерирован ключ неправильного размера");
                         }
-                        
+
                         std::cout << "[OK] Сгенерирована пара ключей." << std::endl;
                         std::cout << "[INFO] Публичный ключ (HEX): " << bytes_to_hex(pub_key) << std::endl;
                         std::cout << "[INFO] Приватный ключ сохранён в памяти." << std::endl;
-                        
                     } else {
-                        // fallback
                         pub_key = generate_random_key(plugin->key_size);
                         priv_key = generate_random_key(plugin->key_size);
                     }
-                    
-                    asym_keys.public_key = pub_key;
-                    asym_keys.private_key = priv_key;
-                    asym_keys.algorithm = plugin->name;
-                    asym_keys.is_asymmetric = true;
-                    last_key_pair = asym_keys;
-                    last_algorithm = plugin->name;
-                    last_is_asymmetric = true;
-                    
-                    // ШИФРУЕМ ПУБЛИЧНЫМ КЛЮЧОМ
-                    std::cout << "Введите текст: ";
-                    std::string text;
-                    std::getline(std::cin, text);
-                    auto data = string_to_bytes(text);
-                    
-                    auto result = encrypt_data(plugin, pub_key, data);
-                    last_ciphertext = result;
-                    last_plaintext = text;
-                    std::cout << "[OK] Шифротекст (HEX): " << bytes_to_hex(result) << std::endl;
+                } else if (choice == 2) {
+                    std::cout << "Путь к файлу с публичным ключом: ";
+                    std::string path;
+                    std::getline(std::cin, path);
+                    pub_key = read_key_from_file(path);
+                    priv_key = pub_key;
+                    if (pub_key.size() != plugin->key_size) {
+                        throw std::runtime_error("Размер ключа: ожидается " + std::to_string(plugin->key_size));
+                    }
+                } else {
+                    throw std::runtime_error("Неверный выбор");
                 }
-                
+
+                asym_keys.public_key = pub_key;
+                asym_keys.private_key = priv_key;
+                asym_keys.algorithm = plugin->name;
+                asym_keys.is_asymmetric = true;
+                last_key_pair = asym_keys;
+                last_algorithm = plugin->name;
+                last_is_asymmetric = true;
+
+                std::cout << "Введите текст (для завершения введите пустую строку):" << std::endl;
+                std::string text, line;
+                while (std::getline(std::cin, line) && !line.empty()) {
+                    if (!text.empty()) text += "\n";
+                    text += line;
+                }
+
+                auto data = string_to_bytes(text);
+                auto result = encrypt_data(plugin, pub_key, data);
+                last_ciphertext = result;
+                last_plaintext = text;
+                std::cout << "[OK] Шифротекст (HEX): " << bytes_to_hex(result) << std::endl;
+
             } else {
                 std::cout << "\n--- Симметричный алгоритм ---\n";
                 std::cout << "1. Сгенерировать случайный ключ\n";
-                std::cout << "2. Ввести ключ (HEX)\n";
+                std::cout << "2. Ввести ключ\n";
                 std::cout << "3. Загрузить из файла\n";
                 std::cout << "0. Назад\n";
                 std::cout << "Выбор: ";
-                
+
                 int choice;
                 std::cin >> choice;
                 if (std::cin.fail()) {
@@ -390,9 +413,9 @@ void CryptumApp::handle_text() {
                     throw std::runtime_error("Введите число");
                 }
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                
+
                 if (choice == 0) return;
-                
+
                 switch (choice) {
                     case 1: {
                         key = generate_random_key(plugin->key_size);
@@ -400,13 +423,14 @@ void CryptumApp::handle_text() {
                         break;
                     }
                     case 2: {
-                        std::cout << "Введите ключ (HEX): ";
-                        std::string hex_key;
-                        std::getline(std::cin, hex_key);
-                        key = hex_to_bytes(hex_key);
-                        if (key.size() != plugin->key_size) {
-                            throw std::runtime_error("Размер ключа: ожидается " + std::to_string(plugin->key_size));
-                        }
+                        std::cout << "Введите ключ: ";
+                        std::string key_str;
+                        std::getline(std::cin, key_str);
+                        key = string_to_key(key_str, plugin->key_size);
+                        last_symmetric_key = key;
+                        last_algorithm = plugin->name;
+                        last_is_asymmetric = false;
+                        std::cout << "[INFO] Ключ сохранён в памяти для расшифрования." << std::endl;
                         break;
                     }
                     case 3: {
@@ -422,223 +446,96 @@ void CryptumApp::handle_text() {
                     default:
                         throw std::runtime_error("Неверный выбор");
                 }
-                
+
                 last_symmetric_key = key;
                 last_algorithm = plugin->name;
                 last_is_asymmetric = false;
                 std::cout << "[INFO] Ключ сохранён в памяти для расшифрования." << std::endl;
-                
-                std::cout << "Введите текст: ";
-                std::string text;
-                std::getline(std::cin, text);
+
+                std::cout << "Введите текст (для завершения введите пустую строку):" << std::endl;
+                std::string text, line;
+                while (std::getline(std::cin, line) && !line.empty()) {
+                    if (!text.empty()) text += "\n";
+                    text += line;
+                }
+
                 auto data = string_to_bytes(text);
-                
                 auto result = encrypt_data(plugin, key, data);
                 last_ciphertext = result;
                 last_plaintext = text;
                 std::cout << "[OK] Шифротекст (HEX): " << bytes_to_hex(result) << std::endl;
             }
-        }
-        
-        // ===== ДЕШИФРОВАНИЕ =====
-        else {
+        } else {
             std::vector<uint8_t> key_for_decrypt;
             bool has_key = false;
-            
+
             if (is_asym) {
-                    if (!last_key_pair.private_key.empty() && last_algorithm == plugin->name) {
+                if (!last_key_pair.private_key.empty() && last_algorithm == plugin->name) {
                     has_key = true;
                     asym_keys = last_key_pair;
-                    key_for_decrypt = asym_keys.public_key;      // ← ИСПОЛЬЗУЙ ЭТО!
-                    std::cout << "[INFO] Найден сохранённый приватный ключ для " << plugin->name << std::endl;
-                    std::cout << "Использовать сохранённый ключ? (y/n): ";
-                    std::string answer;
-                    std::getline(std::cin, answer);
-                    if (answer == "y" || answer == "Y") {
-                        std::cout << "[OK] Используется сохранённый приватный ключ." << std::endl;
-                    } else {
-                        has_key = false;
-                    }
+                    key_for_decrypt = asym_keys.private_key;
+                    std::cout << "[OK] Используется сохранённый приватный ключ для " << plugin->name << std::endl;
+                } else {
+                    std::cout << "[ERROR] Нет сохранённого приватного ключа для " << plugin->name << std::endl;
+                    std::cout << "Сначала зашифруйте данные или сгенерируйте ключи." << std::endl;
+                    return;
                 }
             } else {
                 if (!last_symmetric_key.empty() && last_algorithm == plugin->name) {
                     has_key = true;
                     key = last_symmetric_key;
                     key_for_decrypt = key;
-                    std::cout << "[INFO] Найден сохранённый ключ для " << plugin->name << std::endl;
-                    std::cout << "Использовать сохранённый ключ? (y/n): ";
-                    std::string answer;
-                    std::getline(std::cin, answer);
-                    if (answer == "y" || answer == "Y") {
-                        std::cout << "[OK] Используется сохранённый ключ." << std::endl;
-                    } else {
-                        has_key = false;
-                    }
-                }
-            }
-            
-            if (!has_key) {
-                std::cout << "\n--- Введите ключ для расшифрования ---\n";
-                
-                if (is_asym) {
-                    std::cout << "1. Ввести приватный ключ (HEX)\n";
-                    std::cout << "2. Загрузить приватный ключ из файла\n";
-                    std::cout << "0. Назад\n";
-                    std::cout << "Выбор: ";
-                    
-                    int choice;
-                    std::cin >> choice;
-                    if (std::cin.fail()) {
-                        std::cin.clear();
-                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                        throw std::runtime_error("Введите число");
-                    }
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    
-                    if (choice == 0) return;
-                    
-                    std::vector<uint8_t> priv_key;
-                    
-                    if (choice == 1) {
-                        std::cout << "Введите приватный ключ (HEX): ";
-                        std::string hex_key;
-                        std::getline(std::cin, hex_key);
-                        priv_key = hex_to_bytes(hex_key);
-                    } else if (choice == 2) {
-                        std::cout << "Путь к приватному ключу: ";
-                        std::string path;
-                        std::getline(std::cin, path);
-                        priv_key = read_key_from_file(path);
-                    } else {
-                        throw std::runtime_error("Неверный выбор");
-                    }
-                    
-                    asym_keys.private_key = priv_key;
-                    asym_keys.algorithm = plugin->name;
-                    asym_keys.is_asymmetric = true;
-                    last_key_pair = asym_keys;
-                    last_algorithm = plugin->name;
-                    last_is_asymmetric = true;
-                    key_for_decrypt = priv_key;
-                    
+                    std::cout << "[OK] Используется сохранённый ключ для " << plugin->name << std::endl;
                 } else {
-                    std::cout << "1. Ввести ключ (HEX)\n";
-                    std::cout << "2. Загрузить ключ из файла\n";
-                    std::cout << "0. Назад\n";
-                    std::cout << "Выбор: ";
-                    
-                    int choice;
-                    std::cin >> choice;
-                    if (std::cin.fail()) {
-                        std::cin.clear();
-                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                        throw std::runtime_error("Введите число");
-                    }
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    
-                    if (choice == 0) return;
-                    
-                    if (choice == 1) {
-                        std::cout << "Введите ключ (HEX): ";
-                        std::string hex_key;
-                        std::getline(std::cin, hex_key);
-                        key = hex_to_bytes(hex_key);
-                        if (key.size() != plugin->key_size) {
-                            throw std::runtime_error("Размер ключа: ожидается " + std::to_string(plugin->key_size));
-                        }
-                    } else if (choice == 2) {
-                        std::cout << "Путь к файлу с ключом: ";
-                        std::string path;
-                        std::getline(std::cin, path);
-                        key = read_key_from_file(path);
-                        if (key.size() != plugin->key_size) {
-                            throw std::runtime_error("Размер ключа: ожидается " + std::to_string(plugin->key_size));
-                        }
-                    } else {
-                        throw std::runtime_error("Неверный выбор");
-                    }
-                    
-                    last_symmetric_key = key;
-                    last_algorithm = plugin->name;
-                    last_is_asymmetric = false;
-                    key_for_decrypt = key;
+                    std::cout << "[ERROR] Нет сохранённого ключа для " << plugin->name << std::endl;
+                    std::cout << "Сначала зашифруйте данные или сгенерируйте ключ." << std::endl;
+                    return;
                 }
             }
-            
-            std::cout << "\n--- Источник шифротекста ---\n";
-            if (!last_ciphertext.empty()) {
-                std::cout << "1. Использовать последний зашифрованный текст\n";
-            }
-            std::cout << "2. Ввести HEX вручную\n";
-            std::cout << "3. Загрузить из файла\n";
-            std::cout << "0. Назад\n";
-            std::cout << "Выбор: ";
-            
-            int src_choice;
-            std::cin >> src_choice;
-            if (std::cin.fail()) {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                throw std::runtime_error("Введите число");
-            }
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            
+
             std::vector<uint8_t> data;
-            switch (src_choice) {
-                case 0: return;
-                case 1:
-                    if (last_ciphertext.empty()) {
-                        std::cerr << "[ERROR] Нет сохранённого шифротекста!" << std::endl;
-                        return;
+
+            if (!last_ciphertext.empty()) {
+                std::cout << "[OK] Используется последний шифротекст." << std::endl;
+                data = last_ciphertext;
+            } else {
+                std::cout << "\n--- Введите шифротекст ---\n";
+                std::cout << "1. Ввести HEX вручную\n";
+                std::cout << "2. Загрузить из файла\n";
+                std::cout << "0. Назад\n";
+                std::cout << "Выбор: ";
+
+                int src_choice;
+                std::cin >> src_choice;
+                if (std::cin.fail()) {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    throw std::runtime_error("Введите число");
+                }
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+                switch (src_choice) {
+                    case 0: return;
+                    case 1: {
+                        std::cout << "Введите шифротекст (HEX): ";
+                        std::string hex_cipher;
+                        std::getline(std::cin, hex_cipher);
+                        data = hex_to_bytes(hex_cipher);
+                        break;
                     }
-                    data = last_ciphertext;
-                    std::cout << "[OK] Используется последний шифротекст." << std::endl;
-                    break;
-                case 2: {
-                    std::cout << "Введите шифротекст (HEX): ";
-                    std::string hex_cipher;
-                    std::getline(std::cin, hex_cipher);
-                    data = hex_to_bytes(hex_cipher);
-                    break;
+                    case 2: {
+                        std::cout << "Путь к файлу с шифротекстом: ";
+                        std::string path;
+                        std::getline(std::cin, path);
+                        data = read_file(path);
+                        break;
+                    }
+                    default:
+                        throw std::runtime_error("Неверный выбор");
                 }
-                case 3: {
-                    std::cout << "Путь к файлу с шифротекстом: ";
-                    std::string path;
-                    std::getline(std::cin, path);
-                    data = read_file(path);
-                    break;
-                }
-                default:
-                    throw std::runtime_error("Неверный выбор");
             }
-            // В handle_text, перед decrypt_data:
-            std::cout << "[DEBUG] last_ciphertext.size() = " << last_ciphertext.size() << std::endl;
-            std::cout << "[DEBUG] last_ciphertext first 20 bytes: ";
-            for (size_t i = 0; i < (last_ciphertext.size() > 20 ? 20 : last_ciphertext.size()); i++) {
-                printf("%02x ", last_ciphertext[i]);
-            }
-            std::cout << std::endl;
+
             auto result = decrypt_data(plugin, key_for_decrypt, data);
-
-            // ===== ВЫВОДИМ ВСЁ В HEX =====
-            std::cout << "[DEBUG] result.size() = " << result.size() << std::endl;
-            std::cout << "[DEBUG] result HEX: ";
-            for (size_t i = 0; i < result.size(); i++) {
-                printf("%02x ", result[i]);
-            }
-            printf("\n");
-
-            // ===== ВЫВОДИМ КАК СТРОКУ (БЕЗ ОБРЕЗАНИЯ) =====
-            std::cout << "[OK] Расшифровано: ";
-            for (size_t i = 0; i < result.size(); i++) {
-                char c = result[i];
-                if (c >= 32 && c <= 126) {
-                    std::cout << c;
-                } else {
-                    std::cout << "\\x" << std::hex << (int)(unsigned char)c;
-                }
-            }
-            std::cout << std::endl;
             std::cout << "[OK] Расшифровано: " << bytes_to_string(result) << std::endl;
             last_plaintext = bytes_to_string(result);
         }
@@ -652,12 +549,12 @@ void CryptumApp::handle_text() {
 void CryptumApp::handle_file() {
     auto plugin = select_plugin();
     if (!plugin) return;
-    
+
     bool is_asym = is_asymmetric_algorithm(plugin->name);
-    
+
     std::cout << "\nФормат ключа: " << plugin->key_format_info << std::endl;
     std::cout << "1. Шифрование\n2. Дешифрование\n0. Назад\nВыбор: ";
-    
+
     int action;
     std::cin >> action;
     if (std::cin.fail()) {
@@ -667,27 +564,26 @@ void CryptumApp::handle_file() {
         return;
     }
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    
+
     if (action == 0) return;
     if (action != 1 && action != 2) {
         std::cerr << "[ERROR] Неверный выбор!" << std::endl;
         return;
     }
-    
+
     try {
         std::vector<uint8_t> key;
         KeyPair asym_keys;
         std::vector<uint8_t> key_for_encrypt;
-        
-        // ===== ШИФРОВАНИЕ =====
+
         if (action == 1) {
             if (is_asym) {
                 std::cout << "\n--- Асимметричный алгоритм ---\n";
                 std::cout << "1. Сгенерировать пару ключей (PUB + PRIV)\n";
-                std::cout << "2. Ввести публичный ключ (HEX)\n";
+                std::cout << "2. Загрузить публичный ключ из файла\n";
                 std::cout << "0. Назад\n";
                 std::cout << "Выбор: ";
-                
+
                 int choice;
                 std::cin >> choice;
                 if (std::cin.fail()) {
@@ -696,67 +592,39 @@ void CryptumApp::handle_file() {
                     throw std::runtime_error("Введите число");
                 }
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                
+
                 if (choice == 0) return;
-                
+
                 std::vector<uint8_t> pub_key, priv_key;
-                
+
                 if (choice == 1) {
-                    if (plugin->generate_key) {
-                        size_t buf_size = 2048;
-                        std::vector<uint8_t> buffer(buf_size);
-                        size_t out_size = buf_size;
-                        int result = plugin->generate_key(buffer.data(), &out_size, 0);
-                        if (result != 0) {
-                            throw std::runtime_error("Ошибка генерации ключей: " + std::to_string(result));
-                        }
-                        buffer.resize(out_size);
-                        std::string key_str = bytes_to_string(buffer);
-                        std::cout << "[OK] Сгенерирована пара ключей." << std::endl;
-                        
-                        size_t pub_pos = key_str.find("PUB:");
-                        size_t priv_pos = key_str.find("PRIV:");
-                        if (pub_pos != std::string::npos && priv_pos != std::string::npos) {
-                            std::string pub_part = key_str.substr(pub_pos + 4, priv_pos - pub_pos - 4);
-                            std::string priv_part = key_str.substr(priv_pos + 5);
-                            pub_key = string_to_bytes(pub_part);
-                            priv_key = string_to_bytes(priv_part);
-                        } else {
-                            pub_key = buffer;
-                            priv_key = buffer;
-                        }
-                    } else {
-                        pub_key = generate_random_key(plugin->key_size);
-                        priv_key = generate_random_key(plugin->key_size);
-                    }
+                    // ... генерация ключей ...
                 } else if (choice == 2) {
-                    std::cout << "Введите публичный ключ (HEX): ";
-                    std::string hex_key;
-                    std::getline(std::cin, hex_key);
-                    pub_key = hex_to_bytes(hex_key);
+                    std::cout << "Путь к файлу с публичным ключом: ";
+                    std::string path;
+                    std::getline(std::cin, path);
+                    pub_key = read_key_from_file(path);
+                    priv_key = pub_key;
+                    if (pub_key.size() != plugin->key_size) {
+                        throw std::runtime_error("Размер ключа: ожидается " + std::to_string(plugin->key_size));
+                    }
                 } else {
                     throw std::runtime_error("Неверный выбор");
                 }
-                
+
                 asym_keys.public_key = pub_key;
                 asym_keys.private_key = priv_key;
-                asym_keys.algorithm = plugin->name;
-                asym_keys.is_asymmetric = true;
-                last_key_pair = asym_keys;
-                last_algorithm = plugin->name;
-                last_is_asymmetric = true;
-                key_for_encrypt = pub_key;
-                
+
                 std::cout << "[INFO] Приватный ключ сохранён в памяти." << std::endl;
-                
+
             } else {
                 std::cout << "\n--- Симметричный алгоритм ---\n";
                 std::cout << "1. Сгенерировать случайный ключ\n";
-                std::cout << "2. Ввести ключ (HEX)\n";
+                std::cout << "2. Ввести ключ\n";
                 std::cout << "3. Загрузить ключ из файла\n";
                 std::cout << "0. Назад\n";
                 std::cout << "Выбор: ";
-                
+
                 int choice;
                 std::cin >> choice;
                 if (std::cin.fail()) {
@@ -765,9 +633,9 @@ void CryptumApp::handle_file() {
                     throw std::runtime_error("Введите число");
                 }
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                
+
                 if (choice == 0) return;
-                
+
                 switch (choice) {
                     case 1: {
                         key = generate_random_key(plugin->key_size);
@@ -775,13 +643,14 @@ void CryptumApp::handle_file() {
                         break;
                     }
                     case 2: {
-                        std::cout << "Введите ключ (HEX): ";
-                        std::string hex_key;
-                        std::getline(std::cin, hex_key);
-                        key = hex_to_bytes(hex_key);
-                        if (key.size() != plugin->key_size) {
-                            throw std::runtime_error("Размер ключа: ожидается " + std::to_string(plugin->key_size));
-                        }
+                        std::cout << "Введите ключ: ";
+                        std::string key_str;
+                        std::getline(std::cin, key_str);
+                        key = string_to_key(key_str, plugin->key_size);
+                        last_symmetric_key = key;
+                        last_algorithm = plugin->name;
+                        last_is_asymmetric = false;
+                        std::cout << "[INFO] Ключ сохранён в памяти для расшифрования." << std::endl;
                         break;
                     }
                     case 3: {
@@ -797,25 +666,25 @@ void CryptumApp::handle_file() {
                     default:
                         throw std::runtime_error("Неверный выбор");
                 }
-                
+
                 last_symmetric_key = key;
                 last_algorithm = plugin->name;
                 last_is_asymmetric = false;
                 key_for_encrypt = key;
                 std::cout << "[INFO] Ключ сохранён в памяти." << std::endl;
             }
-            
+
             std::cout << "Входной файл: ";
             std::string input_path;
             std::getline(std::cin, input_path);
-            
+
             std::cout << "Выходной файл: ";
             std::string output_path;
             std::getline(std::cin, output_path);
-            
+
             auto data = read_file(input_path);
             std::cout << "[OK] Прочитано " << data.size() << " байт" << std::endl;
-            
+
             std::vector<uint8_t> result;
             if (is_asym) {
                 result = encrypt_data(plugin, asym_keys.public_key, data);
@@ -823,147 +692,50 @@ void CryptumApp::handle_file() {
                 result = encrypt_data(plugin, key_for_encrypt, data);
             }
             write_file(output_path, result);
-            
+
             last_ciphertext = result;
             std::cout << "[OK] Зашифровано " << result.size() << " байт" << std::endl;
             std::cout << "[OK] Сохранено в: " << output_path << std::endl;
-            
+
         } else {
-            // ===== ДЕШИФРОВАНИЕ =====
             std::vector<uint8_t> key_for_decrypt;
             bool has_key = false;
-            
+
             if (is_asym) {
                 if (!last_key_pair.private_key.empty() && last_algorithm == plugin->name) {
                     has_key = true;
                     asym_keys = last_key_pair;
                     key_for_decrypt = asym_keys.private_key;
-                    std::cout << "[INFO] Найден сохранённый приватный ключ для " << plugin->name << std::endl;
-                    std::cout << "Использовать сохранённый ключ? (y/n): ";
-                    std::string answer;
-                    std::getline(std::cin, answer);
-                    if (answer == "y" || answer == "Y") {
-                        std::cout << "[OK] Используется сохранённый приватный ключ." << std::endl;
-                    } else {
-                        has_key = false;
-                    }
+                    std::cout << "[OK] Используется сохранённый приватный ключ для " << plugin->name << std::endl;
+                } else {
+                    std::cout << "[ERROR] Нет сохранённого приватного ключа для " << plugin->name << std::endl;
+                    std::cout << "Сначала зашифруйте данные или сгенерируйте ключи." << std::endl;
+                    return;
                 }
             } else {
                 if (!last_symmetric_key.empty() && last_algorithm == plugin->name) {
                     has_key = true;
                     key = last_symmetric_key;
                     key_for_decrypt = key;
-                    std::cout << "[INFO] Найден сохранённый ключ для " << plugin->name << std::endl;
-                    std::cout << "Использовать сохранённый ключ? (y/n): ";
-                    std::string answer;
-                    std::getline(std::cin, answer);
-                    if (answer == "y" || answer == "Y") {
-                        std::cout << "[OK] Используется сохранённый ключ." << std::endl;
-                    } else {
-                        has_key = false;
-                    }
-                }
-            }
-            
-            if (!has_key) {
-                std::cout << "\n--- Введите ключ для расшифрования ---\n";
-                
-                if (is_asym) {
-                    std::cout << "1. Ввести приватный ключ (HEX)\n";
-                    std::cout << "2. Загрузить приватный ключ из файла\n";
-                    std::cout << "0. Назад\n";
-                    std::cout << "Выбор: ";
-                    
-                    int choice;
-                    std::cin >> choice;
-                    if (std::cin.fail()) {
-                        std::cin.clear();
-                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                        throw std::runtime_error("Введите число");
-                    }
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    
-                    if (choice == 0) return;
-                    
-                    std::vector<uint8_t> priv_key;
-                    
-                    if (choice == 1) {
-                        std::cout << "Введите приватный ключ (HEX): ";
-                        std::string hex_key;
-                        std::getline(std::cin, hex_key);
-                        priv_key = hex_to_bytes(hex_key);
-                    } else if (choice == 2) {
-                        std::cout << "Путь к приватному ключу: ";
-                        std::string path;
-                        std::getline(std::cin, path);
-                        priv_key = read_key_from_file(path);
-                    } else {
-                        throw std::runtime_error("Неверный выбор");
-                    }
-                    
-                    asym_keys.private_key = priv_key;
-                    asym_keys.algorithm = plugin->name;
-                    asym_keys.is_asymmetric = true;
-                    last_key_pair = asym_keys;
-                    last_algorithm = plugin->name;
-                    last_is_asymmetric = true;
-                    key_for_decrypt = priv_key;
-                    
+                    std::cout << "[OK] Используется сохранённый ключ для " << plugin->name << std::endl;
                 } else {
-                    std::cout << "1. Ввести ключ (HEX)\n";
-                    std::cout << "2. Загрузить ключ из файла\n";
-                    std::cout << "0. Назад\n";
-                    std::cout << "Выбор: ";
-                    
-                    int choice;
-                    std::cin >> choice;
-                    if (std::cin.fail()) {
-                        std::cin.clear();
-                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                        throw std::runtime_error("Введите число");
-                    }
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    
-                    if (choice == 0) return;
-                    
-                    if (choice == 1) {
-                        std::cout << "Введите ключ (HEX): ";
-                        std::string hex_key;
-                        std::getline(std::cin, hex_key);
-                        key = hex_to_bytes(hex_key);
-                        if (key.size() != plugin->key_size) {
-                            throw std::runtime_error("Размер ключа: ожидается " + std::to_string(plugin->key_size));
-                        }
-                    } else if (choice == 2) {
-                        std::cout << "Путь к файлу с ключом: ";
-                        std::string path;
-                        std::getline(std::cin, path);
-                        key = read_key_from_file(path);
-                        if (key.size() != plugin->key_size) {
-                            throw std::runtime_error("Размер ключа: ожидается " + std::to_string(plugin->key_size));
-                        }
-                    } else {
-                        throw std::runtime_error("Неверный выбор");
-                    }
-                    
-                    last_symmetric_key = key;
-                    last_algorithm = plugin->name;
-                    last_is_asymmetric = false;
-                    key_for_decrypt = key;
+                    std::cout << "[ERROR] Нет сохранённого ключа для " << plugin->name << std::endl;
+                    std::cout << "Сначала зашифруйте данные или сгенерируйте ключ." << std::endl;
+                    return;
                 }
             }
-            
+
             std::cout << "Входной файл: ";
             std::string input_path;
             std::getline(std::cin, input_path);
-            
+
             std::cout << "Выходной файл: ";
             std::string output_path;
             std::getline(std::cin, output_path);
-            
+
             auto data = read_file(input_path);
             std::cout << "[OK] Прочитано " << data.size() << " байт" << std::endl;
-            
+
             std::vector<uint8_t> result;
             if (is_asym) {
                 result = decrypt_data(plugin, key_for_decrypt, data);
@@ -971,7 +743,7 @@ void CryptumApp::handle_file() {
                 result = decrypt_data(plugin, key_for_decrypt, data);
             }
             write_file(output_path, result);
-            
+
             std::cout << "[OK] Расшифровано " << result.size() << " байт" << std::endl;
             std::cout << "[OK] Сохранено в: " << output_path << std::endl;
         }
@@ -979,7 +751,6 @@ void CryptumApp::handle_file() {
         std::cerr << "[ERROR] " << e.what() << std::endl;
     }
 }
-
 // ==================== ГЕНЕРАТОР КЛЮЧЕЙ ====================
 
 void CryptumApp::handle_keygen() {
@@ -993,6 +764,9 @@ void CryptumApp::handle_keygen() {
     try {
         if (is_asym) {
             std::cout << "[INFO] Генерация пары асимметричных ключей...\n";
+            
+            std::vector<uint8_t> pub_key, priv_key;
+            
             if (plugin->generate_key) {
                 size_t buf_size = 2048;
                 std::vector<uint8_t> buffer(buf_size);
@@ -1002,21 +776,51 @@ void CryptumApp::handle_keygen() {
                     throw std::runtime_error("Ошибка генерации: " + std::to_string(result));
                 }
                 buffer.resize(out_size);
-                std::string key_str = bytes_to_string(buffer);
-                std::cout << "[OK] Сгенерирована пара ключей:\n" << key_str << "\n";
+                
+                if (buffer.size() >= plugin->key_size * 2) {
+                    pub_key.assign(buffer.data(), buffer.data() + plugin->key_size);
+                    priv_key.assign(buffer.data() + plugin->key_size, buffer.data() + plugin->key_size * 2);
+                } else {
+                    pub_key = buffer;
+                    priv_key = buffer;
+                }
             } else {
-                auto pub_key = generate_random_key(plugin->key_size);
-                auto priv_key = generate_random_key(plugin->key_size);
-                std::cout << "[OK] Сгенерирована пара ключей:\n";
-                std::cout << "  Публичный (HEX): " << bytes_to_hex(pub_key) << "\n";
-                std::cout << "  Приватный (HEX): " << bytes_to_hex(priv_key) << "\n";
+                pub_key = generate_random_key(plugin->key_size);
+                priv_key = generate_random_key(plugin->key_size);
             }
+            
+            std::cout << "[OK] Сгенерирована пара ключей:\n";
+            std::cout << "  Публичный (HEX): " << bytes_to_hex(pub_key) << "\n";
+            std::cout << "  Приватный (HEX): " << bytes_to_hex(priv_key) << "\n";
+            
+            std::cout << "Сохранить публичный ключ в файл? (y/n): ";
+            std::string answer;
+            std::getline(std::cin, answer);
+            if (answer == "y" || answer == "Y") {
+                std::cout << "Путь к файлу для публичного ключа: ";
+                std::string path;
+                std::getline(std::cin, path);
+                write_file(path, pub_key);
+                std::cout << "[OK] Публичный ключ сохранён в: " << path << std::endl;
+            }
+            
+            std::cout << "Сохранить приватный ключ в файл? (y/n): ";
+            std::getline(std::cin, answer);
+            if (answer == "y" || answer == "Y") {
+                std::cout << "Путь к файлу для приватного ключа: ";
+                std::string path;
+                std::getline(std::cin, path);
+                write_file(path, priv_key);
+                std::cout << "[OK] Приватный ключ сохранён в: " << path << std::endl;
+            }
+            
         } else {
             auto key = generate_random_key(plugin->key_size);
             std::cout << "[OK] Сгенерирован ключ:\n";
             std::cout << "  HEX: " << bytes_to_hex(key) << "\n";
             std::cout << "  Размер: " << key.size() << " байт\n";
-            std::cout << "Сохранить в файл? (y/n): ";
+            
+            std::cout << "Сохранить ключ в файл? (y/n): ";
             std::string answer;
             std::getline(std::cin, answer);
             if (answer == "y" || answer == "Y") {
@@ -1024,7 +828,7 @@ void CryptumApp::handle_keygen() {
                 std::string path;
                 std::getline(std::cin, path);
                 write_file(path, key);
-                std::cout << "[OK] Сохранён в: " << path << std::endl;
+                std::cout << "[OK] Ключ сохранён в: " << path << std::endl;
             }
         }
     } catch (const std::exception& e) {
@@ -1039,7 +843,6 @@ void CryptumApp::show_key_info() {
     if (!plugin) return;
     std::cout << "\n=== " << plugin->name << " ===\n";
     std::cout << "Размер ключа: " << plugin->key_size << " байт\n";
-    std::cout << "Формат: " << plugin->key_format_info << "\n";
     std::cout << "Тип: " << (is_asymmetric_algorithm(plugin->name) ? "Асимметричный" : "Симметричный") << "\n";
 }
 

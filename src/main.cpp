@@ -2,6 +2,23 @@
 #include <iostream>
 
 int main(int argc, char** argv) {
+    // ===== ПРОВЕРКА ПАРОЛЯ =====
+    std::string password;
+    std::cout << "============================================\n";
+    std::cout << "       КРИПТОГРАФИЧЕСКИЙ ИНСТРУМЕНТ\n";
+    std::cout << "============================================\n";
+    std::cout << "Введите пароль: ";
+    std::getline(std::cin, password);
+    
+    const std::string CORRECT_PASSWORD = "123";
+    
+    if (password != CORRECT_PASSWORD) {
+        std::cerr << "[ERROR] Неверный пароль! Выход...\n";
+        return 1;
+    }
+    std::cout << "[OK] Доступ разрешён.\n\n";
+    // =============================
+    
     try {
         CryptumApp app;
         
