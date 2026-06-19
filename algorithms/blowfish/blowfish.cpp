@@ -284,7 +284,6 @@ static uint32_t F(uint32_t x, const uint32_t (*S)[256]) {
     return ((S[0][a] + S[1][b]) ^ S[2][c]) + S[3][d];
 }
 
-// ===== ВСЕ ЭКСПОРТИРУЕМЫЕ ФУНКЦИИ С extern "C" =====
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -3,13 +3,11 @@
 #include <cstring>
 #include <random>
 
-// Метаинформация об алгоритме
 static AlgorithmInfo info = {
     "RC5",
-    RC5_KEY_BYTES   // 16 байт
+    RC5_KEY_BYTES
 };
 
-// Вспомогательные функции для PKCS#7
 static size_t pkcs7_padded_size(size_t input_len) {
     size_t block = RC5_BLOCK_SIZE;
     return ((input_len + block - 1) / block) * block;
@@ -33,7 +31,6 @@ static int pkcs7_remove_padding(uint8_t* data, size_t* len) {
     return 0;
 }
 
-// Генерация случайного IV (8 байт)
 static void generate_iv(uint8_t* iv) {
     std::random_device rd;
     for (size_t i = 0; i < RC5_BLOCK_SIZE; i++) {
@@ -41,7 +38,6 @@ static void generate_iv(uint8_t* iv) {
     }
 }
 
-// Экспортируемые функции
 extern "C" {
 
 const AlgorithmInfo* get_algorithm_info() {
@@ -50,48 +46,39 @@ const AlgorithmInfo* get_algorithm_info() {
 
 size_t get_output_size(size_t input_size, int encrypt_mode) {
     (void)encrypt_mode;
-    // Для CBC: IV (8 байт) + зашифрованные данные с паддингом
     size_t padded = pkcs7_padded_size(input_size);
     return RC5_BLOCK_SIZE + padded;
 }
 
 int encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
-    // Проверка ключа
     if (key.size != RC5_KEY_BYTES) return -1;
-    
+
     size_t padded_len = pkcs7_padded_size(input.size);
-    size_t total_len = RC5_BLOCK_SIZE + padded_len;  // IV + данные
-    
+    size_t total_len = RC5_BLOCK_SIZE + padded_len;
+
     if (output->size < total_len) return -2;
-    
-    // 1. Генерируем случайный IV (8 байт)
+
     uint8_t iv[RC5_BLOCK_SIZE];
     generate_iv(iv);
     memcpy(output->data, iv, RC5_BLOCK_SIZE);
-    
-    // 2. Разворачиваем ключ в раундовые ключи
+
     uint32_t S[2 * RC5_ROUNDS + 2];
     rc5_expand_key(key.data, S);
-    
-    // 3. Подготовка данных с паддингом
+
     uint8_t* padded = new uint8_t[padded_len];
     memcpy(padded, input.data, input.size);
     pkcs7_apply_padding(padded, input.size, padded_len);
-    
-    // 4. CBC шифрование
+
     uint8_t prev[RC5_BLOCK_SIZE];
     memcpy(prev, iv, RC5_BLOCK_SIZE);
-    
+
     for (size_t i = 0; i < padded_len; i += RC5_BLOCK_SIZE) {
-        // XOR с предыдущим шифротекстом (или IV для первого блока)
         for (size_t j = 0; j < RC5_BLOCK_SIZE; j++) {
             padded[i + j] ^= prev[j];
         }
-        
-        // Шифрование блока
+
         rc5_encrypt_block(padded + i, output->data + RC5_BLOCK_SIZE + i, S);
-        
-        // Сохраняем текущий шифротекст для следующего блока
+
         memcpy(prev, output->data + RC5_BLOCK_SIZE + i, RC5_BLOCK_SIZE);
     }
     output->size = total_len;
@@ -100,57 +87,48 @@ int encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
 }
 
 int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
-    // Проверки
     if (key.size != RC5_KEY_BYTES) return -1;
     if (input.size < RC5_BLOCK_SIZE) return -2;
     if ((input.size - RC5_BLOCK_SIZE) % RC5_BLOCK_SIZE != 0) return -3;
     if (output->size < input.size) return -4;
-    
-    // 1. Извлекаем IV из начала
+
     const uint8_t* iv = input.data;
     const uint8_t* ciphertext = input.data + RC5_BLOCK_SIZE;
     size_t cipher_len = input.size - RC5_BLOCK_SIZE;
-    
-    // 2. Разворачиваем ключ
+
     uint32_t S[2 * RC5_ROUNDS + 2];
     rc5_expand_key(key.data, S);
-    
-    // 3. Расшифровываем CBC
+
     uint8_t prev[RC5_BLOCK_SIZE];
     memcpy(prev, iv, RC5_BLOCK_SIZE);
-    
+
     uint8_t* decrypted = new uint8_t[cipher_len];
-    
+
     for (size_t i = 0; i < cipher_len; i += RC5_BLOCK_SIZE) {
-        // Расшифровываем блок
         rc5_decrypt_block(ciphertext + i, decrypted + i, S);
-        
-        // XOR с предыдущим шифротекстом (или IV)
+
         for (size_t j = 0; j < RC5_BLOCK_SIZE; j++) {
             decrypted[i + j] ^= prev[j];
         }
-        
-        // Сохраняем текущий шифротекст для следующего блока
+
         memcpy(prev, ciphertext + i, RC5_BLOCK_SIZE);
     }
-    
-    // 4. Удаляем паддинг
+
     size_t decrypted_len = cipher_len;
     if (pkcs7_remove_padding(decrypted, &decrypted_len) != 0) {
         delete[] decrypted;
         return -5;
     }
-    
-    // 5. Копируем результат
+
     if (output->size < decrypted_len) {
         delete[] decrypted;
         return -6;
     }
     memcpy(output->data, decrypted, decrypted_len);
     output->size = decrypted_len;
-    
+
     delete[] decrypted;
     return 0;
 }
 
-} // extern "C"
+}

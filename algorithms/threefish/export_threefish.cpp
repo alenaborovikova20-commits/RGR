@@ -4,11 +4,10 @@
 #include <cstdio>
 #include <vector>
 #include <stdexcept>
-#define TF_KEY_BYTES 64          // ← ПЕРЕНЕСИ СЮДА!
+#define TF_KEY_BYTES 64          
 
 static AlgorithmInfo info = {"Threefish", TF_KEY_BYTES};
 
-// ===== ОПРЕДЕЛЯЕМ ВСЁ САМИ =====
 #define TF_BLOCK_SIZE 64
 #define TF_WORDS 8
 #define TF_ROUNDS 72
@@ -125,7 +124,6 @@ static void threefish_decrypt_block(const uint8_t* in, uint8_t* out, const uint6
     }
 }
 
-// ===== ПАДДИНГ =====
 static std::vector<uint8_t> add_padding(const std::vector<uint8_t>& data) {
     size_t block_size = TF_BLOCK_SIZE;
     size_t padded_len = ((data.size() + block_size - 1) / block_size) * block_size;
@@ -153,7 +151,6 @@ static std::vector<uint8_t> remove_padding(const std::vector<uint8_t>& data) {
     return std::vector<uint8_t>(data.begin(), data.end() - pad_byte);
 }
 
-// ===== ЭКСПОРТ =====
 static int simple_encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
     uint64_t key_words[TF_WORDS];
     for (int i = 0; i < TF_WORDS; i++) {
@@ -207,9 +204,6 @@ static int simple_decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output)
     return 0;
 }
 
-// ============================================================
-// ЭКСПОРТ
-// ============================================================
 extern "C" {
 
 const AlgorithmInfo* get_algorithm_info() {

@@ -43,7 +43,6 @@ static int64_t legendre(int64_t a, int64_t p) {
     return mod_pow(a, (p - 1) / 2, p);
 }
 
-// ========== ГЕНЕРАЦИЯ КЛЮЧЕЙ ==========
 void gm_generate_keys(uint8_t* public_key, uint8_t* private_key) {
     static std::mt19937_64 rng(std::random_device{}());
     
@@ -54,24 +53,20 @@ void gm_generate_keys(uint8_t* public_key, uint8_t* private_key) {
     } while (p == q);
     n = p * q;
     
-    // Ищем y: (-1) символ Лежандра для p и q
     for (y = 2; y < n; y++) {
         if (legendre(y, p) == p - 1 && legendre(y, q) == q - 1)
             break;
     }
     
-    // Публичный ключ: n, y (16 байт)
     int64_t* pub = (int64_t*)public_key;
     pub[0] = n;
     pub[1] = y;
     
-    // Приватный ключ: p, q (16 байт)
     int64_t* priv = (int64_t*)private_key;
     priv[0] = p;
     priv[1] = q;
 }
 
-// ========== ШИФРОВАНИЕ (ПУБЛИЧНЫЙ КЛЮЧ) ==========
 void gm_encrypt_block(const uint8_t* in, uint8_t* out, const uint8_t* public_key) {
     static std::mt19937_64 rng(std::random_device{}());
     
@@ -93,7 +88,6 @@ void gm_encrypt_block(const uint8_t* in, uint8_t* out, const uint8_t* public_key
     }
 }
 
-// ========== РАСШИФРОВАНИЕ (ПРИВАТНЫЙ КЛЮЧ) ==========
 void gm_decrypt_block(const uint8_t* in, uint8_t* out, const uint8_t* private_key) {
     const int64_t* priv = (const int64_t*)private_key;
     int64_t p = priv[0];

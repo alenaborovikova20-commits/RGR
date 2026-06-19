@@ -5,8 +5,6 @@
 
 static AlgorithmInfo info = {"Goldwasser-Micali", GM_KEY_BYTES};
 
-// Новый формат ключа: [публичный 16 байт][приватный 16 байт]
-// Всего 32 байта
 
 extern "C" {
 
@@ -27,7 +25,6 @@ int generate_key(uint8_t* buffer, size_t* size, int mode) {
     
     gm_generate_keys(pub, priv);
     
-    // Формат: [публичный 16 байт][приватный 16 байт]
     memcpy(buffer, pub, 16);
     memcpy(buffer + 16, priv, 16);
     
@@ -36,9 +33,8 @@ int generate_key(uint8_t* buffer, size_t* size, int mode) {
 }
 
 int encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
-    if (key.size != 32) return -1;  // Полный ключ (публичный + приватный)
+    if (key.size != 32) return -1;  
     
-    // БЕРЁМ ПЕРВЫЕ 16 БАЙТ — ПУБЛИЧНЫЙ КЛЮЧ
     ConstBuffer pub_key = {key.data, 16};
     
     size_t needed = input.size * 8 * sizeof(int64_t);
@@ -56,7 +52,6 @@ int encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
 int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
     if (key.size != 32) return -1;
     
-    // БЕРЁМ ПОСЛЕДНИЕ 16 БАЙТ — ПРИВАТНЫЙ КЛЮЧ
     ConstBuffer priv_key = {key.data + 16, 16};
     
     size_t block_size = 8 * sizeof(int64_t);

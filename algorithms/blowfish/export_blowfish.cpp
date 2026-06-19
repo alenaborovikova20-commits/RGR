@@ -28,9 +28,6 @@ static int pkcs7_remove_padding(uint8_t* data, size_t* len) {
     return 0;
 }
 
-// ============================================================
-// ВСЕ ЭКСПОРТИРУЕМЫЕ ФУНКЦИИ С extern "C"
-// ============================================================
 extern "C" {
 
 const AlgorithmInfo* get_algorithm_info() {
@@ -86,4 +83,4 @@ int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
     return 0;
 }
 
-} // extern "C"
+} 

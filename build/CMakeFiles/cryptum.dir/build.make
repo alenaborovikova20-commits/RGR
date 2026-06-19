@@ -69,24 +69,10 @@ include CMakeFiles/cryptum.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/cryptum.dir/flags.make
 
-CMakeFiles/cryptum.dir/src/cryptum.cpp.o: CMakeFiles/cryptum.dir/flags.make
-CMakeFiles/cryptum.dir/src/cryptum.cpp.o: /home/ushaneva/Документы/prog/RGR/src/cryptum.cpp
-CMakeFiles/cryptum.dir/src/cryptum.cpp.o: CMakeFiles/cryptum.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/cryptum.dir/src/cryptum.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cryptum.dir/src/cryptum.cpp.o -MF CMakeFiles/cryptum.dir/src/cryptum.cpp.o.d -o CMakeFiles/cryptum.dir/src/cryptum.cpp.o -c /home/ushaneva/Документы/prog/RGR/src/cryptum.cpp
-
-CMakeFiles/cryptum.dir/src/cryptum.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/cryptum.dir/src/cryptum.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/src/cryptum.cpp > CMakeFiles/cryptum.dir/src/cryptum.cpp.i
-
-CMakeFiles/cryptum.dir/src/cryptum.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cryptum.dir/src/cryptum.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/src/cryptum.cpp -o CMakeFiles/cryptum.dir/src/cryptum.cpp.s
-
 CMakeFiles/cryptum.dir/src/main.cpp.o: CMakeFiles/cryptum.dir/flags.make
 CMakeFiles/cryptum.dir/src/main.cpp.o: /home/ushaneva/Документы/prog/RGR/src/main.cpp
 CMakeFiles/cryptum.dir/src/main.cpp.o: CMakeFiles/cryptum.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/cryptum.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/cryptum.dir/src/main.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cryptum.dir/src/main.cpp.o -MF CMakeFiles/cryptum.dir/src/main.cpp.o.d -o CMakeFiles/cryptum.dir/src/main.cpp.o -c /home/ushaneva/Документы/prog/RGR/src/main.cpp
 
 CMakeFiles/cryptum.dir/src/main.cpp.i: cmake_force
@@ -97,19 +83,145 @@ CMakeFiles/cryptum.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cryptum.dir/src/main.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/src/main.cpp -o CMakeFiles/cryptum.dir/src/main.cpp.s
 
+CMakeFiles/cryptum.dir/src/menu.cpp.o: CMakeFiles/cryptum.dir/flags.make
+CMakeFiles/cryptum.dir/src/menu.cpp.o: /home/ushaneva/Документы/prog/RGR/src/menu.cpp
+CMakeFiles/cryptum.dir/src/menu.cpp.o: CMakeFiles/cryptum.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/cryptum.dir/src/menu.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cryptum.dir/src/menu.cpp.o -MF CMakeFiles/cryptum.dir/src/menu.cpp.o.d -o CMakeFiles/cryptum.dir/src/menu.cpp.o -c /home/ushaneva/Документы/prog/RGR/src/menu.cpp
+
+CMakeFiles/cryptum.dir/src/menu.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/cryptum.dir/src/menu.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/src/menu.cpp > CMakeFiles/cryptum.dir/src/menu.cpp.i
+
+CMakeFiles/cryptum.dir/src/menu.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cryptum.dir/src/menu.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/src/menu.cpp -o CMakeFiles/cryptum.dir/src/menu.cpp.s
+
+CMakeFiles/cryptum.dir/src/plugins_loader.cpp.o: CMakeFiles/cryptum.dir/flags.make
+CMakeFiles/cryptum.dir/src/plugins_loader.cpp.o: /home/ushaneva/Документы/prog/RGR/src/plugins_loader.cpp
+CMakeFiles/cryptum.dir/src/plugins_loader.cpp.o: CMakeFiles/cryptum.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/cryptum.dir/src/plugins_loader.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cryptum.dir/src/plugins_loader.cpp.o -MF CMakeFiles/cryptum.dir/src/plugins_loader.cpp.o.d -o CMakeFiles/cryptum.dir/src/plugins_loader.cpp.o -c /home/ushaneva/Документы/prog/RGR/src/plugins_loader.cpp
+
+CMakeFiles/cryptum.dir/src/plugins_loader.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/cryptum.dir/src/plugins_loader.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/src/plugins_loader.cpp > CMakeFiles/cryptum.dir/src/plugins_loader.cpp.i
+
+CMakeFiles/cryptum.dir/src/plugins_loader.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cryptum.dir/src/plugins_loader.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/src/plugins_loader.cpp -o CMakeFiles/cryptum.dir/src/plugins_loader.cpp.s
+
+CMakeFiles/cryptum.dir/src/crypto_processor.cpp.o: CMakeFiles/cryptum.dir/flags.make
+CMakeFiles/cryptum.dir/src/crypto_processor.cpp.o: /home/ushaneva/Документы/prog/RGR/src/crypto_processor.cpp
+CMakeFiles/cryptum.dir/src/crypto_processor.cpp.o: CMakeFiles/cryptum.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/cryptum.dir/src/crypto_processor.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cryptum.dir/src/crypto_processor.cpp.o -MF CMakeFiles/cryptum.dir/src/crypto_processor.cpp.o.d -o CMakeFiles/cryptum.dir/src/crypto_processor.cpp.o -c /home/ushaneva/Документы/prog/RGR/src/crypto_processor.cpp
+
+CMakeFiles/cryptum.dir/src/crypto_processor.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/cryptum.dir/src/crypto_processor.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/src/crypto_processor.cpp > CMakeFiles/cryptum.dir/src/crypto_processor.cpp.i
+
+CMakeFiles/cryptum.dir/src/crypto_processor.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cryptum.dir/src/crypto_processor.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/src/crypto_processor.cpp -o CMakeFiles/cryptum.dir/src/crypto_processor.cpp.s
+
+CMakeFiles/cryptum.dir/src/file_processor.cpp.o: CMakeFiles/cryptum.dir/flags.make
+CMakeFiles/cryptum.dir/src/file_processor.cpp.o: /home/ushaneva/Документы/prog/RGR/src/file_processor.cpp
+CMakeFiles/cryptum.dir/src/file_processor.cpp.o: CMakeFiles/cryptum.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/cryptum.dir/src/file_processor.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cryptum.dir/src/file_processor.cpp.o -MF CMakeFiles/cryptum.dir/src/file_processor.cpp.o.d -o CMakeFiles/cryptum.dir/src/file_processor.cpp.o -c /home/ushaneva/Документы/prog/RGR/src/file_processor.cpp
+
+CMakeFiles/cryptum.dir/src/file_processor.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/cryptum.dir/src/file_processor.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/src/file_processor.cpp > CMakeFiles/cryptum.dir/src/file_processor.cpp.i
+
+CMakeFiles/cryptum.dir/src/file_processor.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cryptum.dir/src/file_processor.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/src/file_processor.cpp -o CMakeFiles/cryptum.dir/src/file_processor.cpp.s
+
+CMakeFiles/cryptum.dir/src/text_handler.cpp.o: CMakeFiles/cryptum.dir/flags.make
+CMakeFiles/cryptum.dir/src/text_handler.cpp.o: /home/ushaneva/Документы/prog/RGR/src/text_handler.cpp
+CMakeFiles/cryptum.dir/src/text_handler.cpp.o: CMakeFiles/cryptum.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/cryptum.dir/src/text_handler.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cryptum.dir/src/text_handler.cpp.o -MF CMakeFiles/cryptum.dir/src/text_handler.cpp.o.d -o CMakeFiles/cryptum.dir/src/text_handler.cpp.o -c /home/ushaneva/Документы/prog/RGR/src/text_handler.cpp
+
+CMakeFiles/cryptum.dir/src/text_handler.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/cryptum.dir/src/text_handler.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/src/text_handler.cpp > CMakeFiles/cryptum.dir/src/text_handler.cpp.i
+
+CMakeFiles/cryptum.dir/src/text_handler.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cryptum.dir/src/text_handler.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/src/text_handler.cpp -o CMakeFiles/cryptum.dir/src/text_handler.cpp.s
+
+CMakeFiles/cryptum.dir/src/file_handler.cpp.o: CMakeFiles/cryptum.dir/flags.make
+CMakeFiles/cryptum.dir/src/file_handler.cpp.o: /home/ushaneva/Документы/prog/RGR/src/file_handler.cpp
+CMakeFiles/cryptum.dir/src/file_handler.cpp.o: CMakeFiles/cryptum.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/cryptum.dir/src/file_handler.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cryptum.dir/src/file_handler.cpp.o -MF CMakeFiles/cryptum.dir/src/file_handler.cpp.o.d -o CMakeFiles/cryptum.dir/src/file_handler.cpp.o -c /home/ushaneva/Документы/prog/RGR/src/file_handler.cpp
+
+CMakeFiles/cryptum.dir/src/file_handler.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/cryptum.dir/src/file_handler.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/src/file_handler.cpp > CMakeFiles/cryptum.dir/src/file_handler.cpp.i
+
+CMakeFiles/cryptum.dir/src/file_handler.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cryptum.dir/src/file_handler.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/src/file_handler.cpp -o CMakeFiles/cryptum.dir/src/file_handler.cpp.s
+
+CMakeFiles/cryptum.dir/src/key_handler.cpp.o: CMakeFiles/cryptum.dir/flags.make
+CMakeFiles/cryptum.dir/src/key_handler.cpp.o: /home/ushaneva/Документы/prog/RGR/src/key_handler.cpp
+CMakeFiles/cryptum.dir/src/key_handler.cpp.o: CMakeFiles/cryptum.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/cryptum.dir/src/key_handler.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cryptum.dir/src/key_handler.cpp.o -MF CMakeFiles/cryptum.dir/src/key_handler.cpp.o.d -o CMakeFiles/cryptum.dir/src/key_handler.cpp.o -c /home/ushaneva/Документы/prog/RGR/src/key_handler.cpp
+
+CMakeFiles/cryptum.dir/src/key_handler.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/cryptum.dir/src/key_handler.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/src/key_handler.cpp > CMakeFiles/cryptum.dir/src/key_handler.cpp.i
+
+CMakeFiles/cryptum.dir/src/key_handler.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cryptum.dir/src/key_handler.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/src/key_handler.cpp -o CMakeFiles/cryptum.dir/src/key_handler.cpp.s
+
+CMakeFiles/cryptum.dir/src/utils.cpp.o: CMakeFiles/cryptum.dir/flags.make
+CMakeFiles/cryptum.dir/src/utils.cpp.o: /home/ushaneva/Документы/prog/RGR/src/utils.cpp
+CMakeFiles/cryptum.dir/src/utils.cpp.o: CMakeFiles/cryptum.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/cryptum.dir/src/utils.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cryptum.dir/src/utils.cpp.o -MF CMakeFiles/cryptum.dir/src/utils.cpp.o.d -o CMakeFiles/cryptum.dir/src/utils.cpp.o -c /home/ushaneva/Документы/prog/RGR/src/utils.cpp
+
+CMakeFiles/cryptum.dir/src/utils.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/cryptum.dir/src/utils.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ushaneva/Документы/prog/RGR/src/utils.cpp > CMakeFiles/cryptum.dir/src/utils.cpp.i
+
+CMakeFiles/cryptum.dir/src/utils.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cryptum.dir/src/utils.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ushaneva/Документы/prog/RGR/src/utils.cpp -o CMakeFiles/cryptum.dir/src/utils.cpp.s
+
 # Object files for target cryptum
 cryptum_OBJECTS = \
-"CMakeFiles/cryptum.dir/src/cryptum.cpp.o" \
-"CMakeFiles/cryptum.dir/src/main.cpp.o"
+"CMakeFiles/cryptum.dir/src/main.cpp.o" \
+"CMakeFiles/cryptum.dir/src/menu.cpp.o" \
+"CMakeFiles/cryptum.dir/src/plugins_loader.cpp.o" \
+"CMakeFiles/cryptum.dir/src/crypto_processor.cpp.o" \
+"CMakeFiles/cryptum.dir/src/file_processor.cpp.o" \
+"CMakeFiles/cryptum.dir/src/text_handler.cpp.o" \
+"CMakeFiles/cryptum.dir/src/file_handler.cpp.o" \
+"CMakeFiles/cryptum.dir/src/key_handler.cpp.o" \
+"CMakeFiles/cryptum.dir/src/utils.cpp.o"
 
 # External object files for target cryptum
 cryptum_EXTERNAL_OBJECTS =
 
-/home/ushaneva/Документы/prog/RGR/bin/cryptum: CMakeFiles/cryptum.dir/src/cryptum.cpp.o
 /home/ushaneva/Документы/prog/RGR/bin/cryptum: CMakeFiles/cryptum.dir/src/main.cpp.o
+/home/ushaneva/Документы/prog/RGR/bin/cryptum: CMakeFiles/cryptum.dir/src/menu.cpp.o
+/home/ushaneva/Документы/prog/RGR/bin/cryptum: CMakeFiles/cryptum.dir/src/plugins_loader.cpp.o
+/home/ushaneva/Документы/prog/RGR/bin/cryptum: CMakeFiles/cryptum.dir/src/crypto_processor.cpp.o
+/home/ushaneva/Документы/prog/RGR/bin/cryptum: CMakeFiles/cryptum.dir/src/file_processor.cpp.o
+/home/ushaneva/Документы/prog/RGR/bin/cryptum: CMakeFiles/cryptum.dir/src/text_handler.cpp.o
+/home/ushaneva/Документы/prog/RGR/bin/cryptum: CMakeFiles/cryptum.dir/src/file_handler.cpp.o
+/home/ushaneva/Документы/prog/RGR/bin/cryptum: CMakeFiles/cryptum.dir/src/key_handler.cpp.o
+/home/ushaneva/Документы/prog/RGR/bin/cryptum: CMakeFiles/cryptum.dir/src/utils.cpp.o
 /home/ushaneva/Документы/prog/RGR/bin/cryptum: CMakeFiles/cryptum.dir/build.make
 /home/ushaneva/Документы/prog/RGR/bin/cryptum: CMakeFiles/cryptum.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable /home/ushaneva/Документы/prog/RGR/bin/cryptum"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ushaneva/Документы/prog/RGR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable /home/ushaneva/Документы/prog/RGR/bin/cryptum"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/cryptum.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

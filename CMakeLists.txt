@@ -4,14 +4,19 @@ project(CryptumApp)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# ===== КУДА КЛАДЁМ ФАЙЛЫ =====
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/plugins)
 
-# ===== ОСНОВНОЕ ПРИЛОЖЕНИЕ =====
 add_executable(cryptum
-    src/cryptum.cpp
     src/main.cpp
+    src/menu.cpp
+    src/plugins_loader.cpp
+    src/crypto_processor.cpp
+    src/file_processor.cpp
+    src/text_handler.cpp
+    src/file_handler.cpp
+    src/key_handler.cpp
+    src/utils.cpp
 )
 
 target_include_directories(cryptum PRIVATE
@@ -22,7 +27,6 @@ target_include_directories(cryptum PRIVATE
 
 target_link_libraries(cryptum PRIVATE dl)
 
-# ===== ПЛАГИНЫ =====
 function(add_crypto_plugin NAME)
     file(GLOB SOURCES "algorithms/${NAME}/*.cpp")
     if(NOT SOURCES)
@@ -47,17 +51,4 @@ add_crypto_plugin(threefish)
 add_crypto_plugin(xtea)
 add_crypto_plugin(gost)
 add_crypto_plugin(gm)
-add_library(blowfish SHARED
-    algorithms/blowfish/export_blowfish.cpp
-    algorithms/blowfish/blowfish.cpp
-)
-target_include_directories(blowfish PRIVATE
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/algorithms/blowfish
-    ${CMAKE_SOURCE_DIR}/include
-)
-set_target_properties(blowfish PROPERTIES
-    PREFIX "lib"
-    SUFFIX ".so"
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/plugins
-)
+add_crypto_plugin(blowfish)

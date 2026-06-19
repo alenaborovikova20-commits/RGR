@@ -2,7 +2,6 @@
  
 static const uint32_t DELTA = 0x9E3779B9;
  
-// Из 16 байт ключа делаем 4 ключа по 32 бита
 void xtea_prepare_keys(const uint8_t* user_key, uint32_t* round_keys) {
     for (int i = 0; i < 4; i++) {
         round_keys[i] = 0;
@@ -13,11 +12,9 @@ void xtea_prepare_keys(const uint8_t* user_key, uint32_t* round_keys) {
     }
 }
  
-// Шифрование
 void xtea_encrypt(const uint8_t* input, uint8_t* output, const uint32_t* round_keys) {
     uint32_t left, right;
     
-    // Собираем 8 байт в два 32-битных числа
     left = 0;
     left |= (uint32_t)input[0];
     left |= (uint32_t)input[1] << 8;
@@ -38,7 +35,6 @@ void xtea_encrypt(const uint8_t* input, uint8_t* output, const uint32_t* round_k
         right += (((left << 4) ^ (left >> 5)) + left) ^ (sum + round_keys[(sum >> 11) & 3]);
     }
     
-    // Разбираем обратно в 8 байт
     output[0] = left & 0xFF;
     output[1] = (left >> 8) & 0xFF;
     output[2] = (left >> 16) & 0xFF;
@@ -49,7 +45,6 @@ void xtea_encrypt(const uint8_t* input, uint8_t* output, const uint32_t* round_k
     output[7] = (right >> 24) & 0xFF;
 }
  
-// Расшифрование
 void xtea_decrypt(const uint8_t* input, uint8_t* output, const uint32_t* round_keys) {
     uint32_t left, right;
     

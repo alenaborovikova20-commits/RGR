@@ -495,29 +495,101 @@ algorithms/xtea/xtea.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/xtea.dir/build.make CMakeFiles/xtea.dir/algorithms/xtea/xtea.cpp.s
 .PHONY : algorithms/xtea/xtea.cpp.s
 
-src/cryptum.o: src/cryptum.cpp.o
-.PHONY : src/cryptum.o
+src/crypto_processor.o: src/crypto_processor.cpp.o
+.PHONY : src/crypto_processor.o
 
 # target to build an object file
-src/cryptum.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/cryptum.cpp.o
-.PHONY : src/cryptum.cpp.o
+src/crypto_processor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/crypto_processor.cpp.o
+.PHONY : src/crypto_processor.cpp.o
 
-src/cryptum.i: src/cryptum.cpp.i
-.PHONY : src/cryptum.i
+src/crypto_processor.i: src/crypto_processor.cpp.i
+.PHONY : src/crypto_processor.i
 
 # target to preprocess a source file
-src/cryptum.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/cryptum.cpp.i
-.PHONY : src/cryptum.cpp.i
+src/crypto_processor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/crypto_processor.cpp.i
+.PHONY : src/crypto_processor.cpp.i
 
-src/cryptum.s: src/cryptum.cpp.s
-.PHONY : src/cryptum.s
+src/crypto_processor.s: src/crypto_processor.cpp.s
+.PHONY : src/crypto_processor.s
 
 # target to generate assembly for a file
-src/cryptum.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/cryptum.cpp.s
-.PHONY : src/cryptum.cpp.s
+src/crypto_processor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/crypto_processor.cpp.s
+.PHONY : src/crypto_processor.cpp.s
+
+src/file_handler.o: src/file_handler.cpp.o
+.PHONY : src/file_handler.o
+
+# target to build an object file
+src/file_handler.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/file_handler.cpp.o
+.PHONY : src/file_handler.cpp.o
+
+src/file_handler.i: src/file_handler.cpp.i
+.PHONY : src/file_handler.i
+
+# target to preprocess a source file
+src/file_handler.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/file_handler.cpp.i
+.PHONY : src/file_handler.cpp.i
+
+src/file_handler.s: src/file_handler.cpp.s
+.PHONY : src/file_handler.s
+
+# target to generate assembly for a file
+src/file_handler.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/file_handler.cpp.s
+.PHONY : src/file_handler.cpp.s
+
+src/file_processor.o: src/file_processor.cpp.o
+.PHONY : src/file_processor.o
+
+# target to build an object file
+src/file_processor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/file_processor.cpp.o
+.PHONY : src/file_processor.cpp.o
+
+src/file_processor.i: src/file_processor.cpp.i
+.PHONY : src/file_processor.i
+
+# target to preprocess a source file
+src/file_processor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/file_processor.cpp.i
+.PHONY : src/file_processor.cpp.i
+
+src/file_processor.s: src/file_processor.cpp.s
+.PHONY : src/file_processor.s
+
+# target to generate assembly for a file
+src/file_processor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/file_processor.cpp.s
+.PHONY : src/file_processor.cpp.s
+
+src/key_handler.o: src/key_handler.cpp.o
+.PHONY : src/key_handler.o
+
+# target to build an object file
+src/key_handler.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/key_handler.cpp.o
+.PHONY : src/key_handler.cpp.o
+
+src/key_handler.i: src/key_handler.cpp.i
+.PHONY : src/key_handler.i
+
+# target to preprocess a source file
+src/key_handler.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/key_handler.cpp.i
+.PHONY : src/key_handler.cpp.i
+
+src/key_handler.s: src/key_handler.cpp.s
+.PHONY : src/key_handler.s
+
+# target to generate assembly for a file
+src/key_handler.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/key_handler.cpp.s
+.PHONY : src/key_handler.cpp.s
 
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
@@ -542,6 +614,102 @@ src/main.s: src/main.cpp.s
 src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
+
+src/menu.o: src/menu.cpp.o
+.PHONY : src/menu.o
+
+# target to build an object file
+src/menu.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/menu.cpp.o
+.PHONY : src/menu.cpp.o
+
+src/menu.i: src/menu.cpp.i
+.PHONY : src/menu.i
+
+# target to preprocess a source file
+src/menu.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/menu.cpp.i
+.PHONY : src/menu.cpp.i
+
+src/menu.s: src/menu.cpp.s
+.PHONY : src/menu.s
+
+# target to generate assembly for a file
+src/menu.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/menu.cpp.s
+.PHONY : src/menu.cpp.s
+
+src/plugins_loader.o: src/plugins_loader.cpp.o
+.PHONY : src/plugins_loader.o
+
+# target to build an object file
+src/plugins_loader.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/plugins_loader.cpp.o
+.PHONY : src/plugins_loader.cpp.o
+
+src/plugins_loader.i: src/plugins_loader.cpp.i
+.PHONY : src/plugins_loader.i
+
+# target to preprocess a source file
+src/plugins_loader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/plugins_loader.cpp.i
+.PHONY : src/plugins_loader.cpp.i
+
+src/plugins_loader.s: src/plugins_loader.cpp.s
+.PHONY : src/plugins_loader.s
+
+# target to generate assembly for a file
+src/plugins_loader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/plugins_loader.cpp.s
+.PHONY : src/plugins_loader.cpp.s
+
+src/text_handler.o: src/text_handler.cpp.o
+.PHONY : src/text_handler.o
+
+# target to build an object file
+src/text_handler.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/text_handler.cpp.o
+.PHONY : src/text_handler.cpp.o
+
+src/text_handler.i: src/text_handler.cpp.i
+.PHONY : src/text_handler.i
+
+# target to preprocess a source file
+src/text_handler.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/text_handler.cpp.i
+.PHONY : src/text_handler.cpp.i
+
+src/text_handler.s: src/text_handler.cpp.s
+.PHONY : src/text_handler.s
+
+# target to generate assembly for a file
+src/text_handler.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/text_handler.cpp.s
+.PHONY : src/text_handler.cpp.s
+
+src/utils.o: src/utils.cpp.o
+.PHONY : src/utils.o
+
+# target to build an object file
+src/utils.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/utils.cpp.o
+.PHONY : src/utils.cpp.o
+
+src/utils.i: src/utils.cpp.i
+.PHONY : src/utils.i
+
+# target to preprocess a source file
+src/utils.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/utils.cpp.i
+.PHONY : src/utils.cpp.i
+
+src/utils.s: src/utils.cpp.s
+.PHONY : src/utils.s
+
+# target to generate assembly for a file
+src/utils.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cryptum.dir/build.make CMakeFiles/cryptum.dir/src/utils.cpp.s
+.PHONY : src/utils.cpp.s
 
 # Help Target
 help:
@@ -594,12 +762,33 @@ help:
 	@echo "... algorithms/xtea/xtea.o"
 	@echo "... algorithms/xtea/xtea.i"
 	@echo "... algorithms/xtea/xtea.s"
-	@echo "... src/cryptum.o"
-	@echo "... src/cryptum.i"
-	@echo "... src/cryptum.s"
+	@echo "... src/crypto_processor.o"
+	@echo "... src/crypto_processor.i"
+	@echo "... src/crypto_processor.s"
+	@echo "... src/file_handler.o"
+	@echo "... src/file_handler.i"
+	@echo "... src/file_handler.s"
+	@echo "... src/file_processor.o"
+	@echo "... src/file_processor.i"
+	@echo "... src/file_processor.s"
+	@echo "... src/key_handler.o"
+	@echo "... src/key_handler.i"
+	@echo "... src/key_handler.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/menu.o"
+	@echo "... src/menu.i"
+	@echo "... src/menu.s"
+	@echo "... src/plugins_loader.o"
+	@echo "... src/plugins_loader.i"
+	@echo "... src/plugins_loader.s"
+	@echo "... src/text_handler.o"
+	@echo "... src/text_handler.i"
+	@echo "... src/text_handler.s"
+	@echo "... src/utils.o"
+	@echo "... src/utils.i"
+	@echo "... src/utils.s"
 .PHONY : help
 
 
