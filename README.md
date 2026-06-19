@@ -5,7 +5,11 @@
 ## Содержание
 - [Особенности](#особенности)
 - [Поддерживаемые алгоритмы](#поддерживаемые-алгоритмы)
-
+- [Структура проекта](#структура-проекта)
+- [Сборка](#сборка)
+- [Использование](#использование)
+- [Контрольные примеры](#контрольные-примеры)
+- [Лицензия](#лицензия)
 ---
 
 ## Особенности
@@ -31,3 +35,127 @@
 | **Goldwasser-Micali (GM)** | Асимметричный | 32 байта | 1 байт |
 
 ---
+## Структура проекта
+RGR/
+├── bin/ # Исполняемый файл
+│ └── cryptum
+├── plugins/ # Динамические библиотеки (.so)
+│ ├── librc5.so
+│ ├── libthreefish.so
+│ ├── libxtea.so
+│ ├── libgost.so
+│ ├── libgm.so
+│ └── libblowfish.so
+├── algorithms/ # Исходники алгоритмов
+│ ├── rc5/
+│ ├── threefish/
+│ ├── xtea/
+│ ├── gost/
+│ ├── gm/
+│ └── blowfish/
+├── src/ # Исходники приложения
+│ ├── main.cpp
+│ ├── menu.cpp
+│ ├── plugins_loader.cpp
+│ ├── crypto_processor.cpp
+│ ├── file_processor.cpp
+│ ├── text_handler.cpp
+│ ├── file_handler.cpp
+│ ├── key_handler.cpp
+│ └── utils.cpp
+├── include/ # Заголовочные файлы
+│ └── crypto_abi.h
+├── keys/ # Директория для ключей
+├── test/ # Тестовые файлы
+├── CMakeLists.txt
+└── README.md
+
+text
+
+---
+
+## Сборка
+
+### Требования
+- **C++17**
+- **CMake 3.10+**
+- **GCC/Clang** (Linux)
+- **Git** (опционально)
+
+### Инструкция
+
+```bash
+# Клонировать репозиторий
+git clone https://github.com/alenaborovikova20-commits/RGR.git
+cd RGR
+
+# Собрать проект
+mkdir build && cd build
+cmake ..
+make -j4
+
+# Запустить
+cd ..
+./bin/cryptum
+Использование
+Интерактивное меню
+bash
+./bin/cryptum
+После запуска откроется меню:
+
+text
+КРИПТОГРАФИЧЕСКИЙ ИНСТРУМЕНТ
+1. Шифрование/дешифрование текста
+2. Шифрование/дешифрование файла
+3. Генератор ключей
+4. Информация о формате ключей
+0. Выход
+Аргументы командной строки
+bash
+./bin/cryptum -a <алгоритм> -m <режим> -i <входной_файл> -o <выходной_файл> [-k <ключ>]
+Примеры:
+
+bash
+# Шифрование с генерацией случайного ключа
+./bin/cryptum -a rc5 -m encrypt -i input.txt -o encrypted.bin
+
+# Шифрование с ключом из файла
+./bin/cryptum -a rc5 -m encrypt -k key.bin -i input.txt -o encrypted.bin
+
+# Расшифрование
+./bin/cryptum -a rc5 -m decrypt -k key.bin -i encrypted.bin -o decrypted.txt
+
+# Генерация ключа
+./bin/cryptum -a rc5 -m generate-key -o key.bin
+
+# Справка
+./bin/cryptum -h
+Контрольные примеры
+Пример для RC5
+text
+Исходный текст: Ushaneva Yulia Maksimovna
+Ключ: 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10
+IV: 12 34 56 78 9A BC DE F0
+
+Шифротекст (HEX):
+DD 5B B9 95 D7 20 8C EE 05 05 72 C2 8D BA 4C 58 4B E4 B9 2E D1 72 7B C7 0A 44 11 3C 86 7E B7 A1
+
+Расшифрованный текст: Ushaneva Yulia Maksimovna
+Пример для Threefish-512
+text
+Исходный текст: Ushaneva Yulia Maksimovna
+Ключ: 00 01 02 ... 3F (64 байта)
+
+Шифротекст (HEX):
+C7 1F 8E 3F 12 4A 5B 6C 7D 8E 9F 0A 1B 2C 3D 4E ...
+
+Расшифрованный текст: Ushaneva Yulia Maksimovna
+Лицензия
+Проект разработан в рамках учебной работы. Свободное использование при указании авторства.
+
+Авторы
+Ушанева Юлия — разработка, тестирование, отчёт.
+
+Боровикова Алена — менторство, ревью.
+
+© 2026 CryptumApp
