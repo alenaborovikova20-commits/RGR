@@ -1,6 +1,7 @@
 #include "crypto_abi.h"
 #include "gost.h"
 #include <cstring>
+#include <cstdio>
 #include <random>
  
 static std::mt19937_64 rng(std::random_device{}());
@@ -40,7 +41,6 @@ static uint64_t generate_iv() {
     return dist(rng);
 }
  
- 
 extern "C" {
  
 const AlgorithmInfo* get_algorithm_info() {
@@ -63,18 +63,59 @@ int encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* out) {
     uint64_t iv = generate_iv();
     memcpy(out->data, &iv, GOST_BLOCK);
  
+    printf("\nШифрование ГОСТ 28147-89 в режиме CBC\n");
+    printf("Исходные данные: ");
+    for (size_t i = 0; i < input.size; i++) printf("%02x ", input.data[i]);
+    printf("\n");
+ 
     memcpy(out->data + GOST_BLOCK, input.data, input.size);
     add_padding(out->data + GOST_BLOCK, input.size, data_pad);
+ 
+    printf("Данные после паддинга: ");
+    for (size_t i = 0; i < data_pad; i++) printf("%02x ", out->data[GOST_BLOCK + i]);
+    printf("\n");
  
     uint32_t round_keys[8];
     gost_prepare_keys(key.data, round_keys);
  
+    printf("Вектор инициализации: ");
+    for (int i = 0; i < GOST_BLOCK; i++) printf("%02x ", out->data[i]);
+    printf("\n");
+    printf("Количество раундов: 32\n\n");
+ 
+    uint8_t prev[GOST_BLOCK];
+    memcpy(prev, out->data, GOST_BLOCK);
+ 
     for (size_t i = 0; i < data_pad; i += GOST_BLOCK) {
-        gost_encrypt_block(out->data + GOST_BLOCK + i,
-                           out->data + GOST_BLOCK + i,
-                           round_keys);
+        size_t block_num = i / GOST_BLOCK;
+        
+        printf("Блок %zu до XOR: ", block_num);
+        for (int j = 0; j < GOST_BLOCK; j++) printf("%02x ", out->data[GOST_BLOCK + i + j]);
+        printf("\n");
+        
+        for (int j = 0; j < GOST_BLOCK; j++) {
+            out->data[GOST_BLOCK + i + j] ^= prev[j];
+        }
+        
+        printf("Блок %zu после XOR: ", block_num);
+        for (int j = 0; j < GOST_BLOCK; j++) printf("%02x ", out->data[GOST_BLOCK + i + j]);
+        printf("\n");
+        
+        gost_encrypt_block(out->data + GOST_BLOCK + i, out->data + GOST_BLOCK + i, round_keys);
+        
+        printf("Блок %zu зашифрован: ", block_num);
+        for (int j = 0; j < GOST_BLOCK; j++) printf("%02x ", out->data[GOST_BLOCK + i + j]);
+        printf("\n\n");
+        
+        memcpy(prev, out->data + GOST_BLOCK + i, GOST_BLOCK);
     }
+ 
     out->size = total;
+ 
+    printf("Полный шифротекст: ");
+    for (size_t i = 0; i < out->size; i++) printf("%02x ", out->data[i]);
+    printf("\n\n");
+ 
     return 0;
 }
  
@@ -85,18 +126,55 @@ int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* out) {
     if (out->size < input.size) return -4;
  
     size_t cipher_len = input.size - GOST_BLOCK;
-    memcpy(out->data, input.data + GOST_BLOCK, cipher_len);
+    const uint8_t* iv = input.data;
+    const uint8_t* ciphertext = input.data + GOST_BLOCK;
+ 
+    printf("\nРасшифрование ГОСТ 28147-89 в режиме CBC\n");
+    printf("Полученный шифротекст: ");
+    for (size_t i = 0; i < input.size; i++) printf("%02x ", input.data[i]);
+    printf("\n");
+ 
+    printf("Вектор инициализации: ");
+    for (int i = 0; i < GOST_BLOCK; i++) printf("%02x ", iv[i]);
+    printf("\n\n");
  
     uint32_t round_keys[8];
     gost_prepare_keys(key.data, round_keys);
  
+    uint8_t prev[GOST_BLOCK];
+    memcpy(prev, iv, GOST_BLOCK);
+ 
     for (size_t i = 0; i < cipher_len; i += GOST_BLOCK) {
-        gost_decrypt_block(out->data + i, out->data + i, round_keys);
+        size_t block_num = i / GOST_BLOCK;
+        
+        gost_decrypt_block(ciphertext + i, out->data + i, round_keys);
+        
+        printf("Блок %zu расшифрован: ", block_num);
+        for (int j = 0; j < GOST_BLOCK; j++) printf("%02x ", out->data[i + j]);
+        printf("\n");
+        
+        for (int j = 0; j < GOST_BLOCK; j++) {
+            out->data[i + j] ^= prev[j];
+        }
+        
+        printf("Блок %zu после XOR: ", block_num);
+        for (int j = 0; j < GOST_BLOCK; j++) printf("%02x ", out->data[i + j]);
+        printf("\n\n");
+        
+        memcpy(prev, ciphertext + i, GOST_BLOCK);
     }
  
     size_t real_len = cipher_len;
     if (remove_padding(out->data, &real_len) != 0) return -5;
     out->size = real_len;
+ 
+    printf("Расшифрованные данные: ");
+    for (size_t i = 0; i < out->size; i++) printf("%02x ", out->data[i]);
+    printf("\n");
+    printf("Текст: ");
+    for (size_t i = 0; i < out->size; i++) printf("%c", out->data[i]);
+    printf("\n\n");
+ 
     return 0;
 }
  
@@ -116,10 +194,17 @@ int encrypt_fixed_iv(ConstBuffer key, ConstBuffer iv, ConstBuffer input, MutBuff
     uint32_t round_keys[8];
     gost_prepare_keys(key.data, round_keys);
  
+    uint8_t prev[GOST_BLOCK];
+    memcpy(prev, out->data, GOST_BLOCK);
+ 
     for (size_t i = 0; i < data_pad; i += GOST_BLOCK) {
-        gost_encrypt_block(out->data + GOST_BLOCK + i,
-                           out->data + GOST_BLOCK + i,
-                           round_keys);
+        for (int j = 0; j < GOST_BLOCK; j++) {
+            out->data[GOST_BLOCK + i + j] ^= prev[j];
+        }
+        
+        gost_encrypt_block(out->data + GOST_BLOCK + i, out->data + GOST_BLOCK + i, round_keys);
+        
+        memcpy(prev, out->data + GOST_BLOCK + i, GOST_BLOCK);
     }
  
     out->size = total;

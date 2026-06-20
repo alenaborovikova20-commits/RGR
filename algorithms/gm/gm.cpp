@@ -102,7 +102,6 @@ void gm_decrypt_block(const uint8_t* in, uint8_t* out, const uint8_t* private_ke
         int64_t leg_p = legendre(c, p);
         int64_t leg_q = legendre(c, q);
         
-        // Если оба = 1 → бит 0, иначе бит 1
         int bit = (leg_p == 1 && leg_q == 1) ? 0 : 1;
         byte |= (bit << bit_pos);
     }

@@ -1,6 +1,7 @@
 #include "crypto_abi.h"
 #include "xtea.h"
 #include <cstring>
+#include <cstdio>
 #include <random>
 
 static std::mt19937_64 rng(std::random_device{}());
@@ -55,6 +56,35 @@ static uint64_t random_iv() {
     return dist(rng);
 }
 
+static void xtea_encrypt_block_debug(const uint8_t* in, uint8_t* out, const uint32_t* round_keys, int block_num) {
+    uint32_t v0, v1;
+    
+    memcpy(&v0, in, 4);
+    memcpy(&v1, in + 4, 4);
+    
+    printf("Блок %d начальное состояние: v0=%08x v1=%08x\n", block_num, v0, v1);
+    
+    uint32_t sum = 0;
+    uint32_t delta = 0x9E3779B9;
+    
+    for (int r = 0; r < 32; r++) {
+        v0 += (((v1 << 4) ^ (v1 >> 5)) + v1) ^ (sum + round_keys[sum & 3]);
+        sum += delta;
+        v1 += (((v0 << 4) ^ (v0 >> 5)) + v0) ^ (sum + round_keys[(sum >> 11) & 3]);
+        
+        if (r < 4 || r % 8 == 0) {
+            printf("Раунд %d: v0=%08x v1=%08x sum=%08x\n", r + 1, v0, v1, sum);
+        }
+    }
+    
+    memcpy(out, &v0, 4);
+    memcpy(out + 4, &v1, 4);
+    
+    printf("Блок %d зашифрован: ", block_num);
+    for (int i = 0; i < XTEA_BLOCK; i++) printf("%02x ", out[i]);
+    printf("\n");
+}
+
 extern "C" {
 
 const AlgorithmInfo* get_algorithm_info() {
@@ -81,21 +111,62 @@ int encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
     uint64_t iv = random_iv();
     memcpy(output->data, &iv, XTEA_BLOCK);
 
+    printf("\nШифрование XTEA в режиме CBC\n");
+    printf("Исходные данные: ");
+    for (size_t i = 0; i < input.size; i++) printf("%02x ", input.data[i]);
+    printf("\n");
+
     memcpy(output->data + XTEA_BLOCK, input.data, input.size);
     add_padding(output->data + XTEA_BLOCK, input.size, data_with_padding);
+
+    printf("Данные после паддинга: ");
+    for (size_t i = 0; i < data_with_padding; i++) printf("%02x ", output->data[XTEA_BLOCK + i]);
+    printf("\n");
 
     uint32_t round_keys[4];
     xtea_prepare_keys(key.data, round_keys);
 
+    printf("Вектор инициализации: ");
+    for (int i = 0; i < XTEA_BLOCK; i++) printf("%02x ", output->data[i]);
+    printf("\n");
+    printf("Количество раундов: 32\n\n");
+
+    uint8_t prev[XTEA_BLOCK];
+    memcpy(prev, output->data, XTEA_BLOCK);
+
     for (size_t i = 0; i < data_with_padding; i += XTEA_BLOCK) {
-        xtea_encrypt(
-            output->data + XTEA_BLOCK + i,
-            output->data + XTEA_BLOCK + i,
-            round_keys
-        );
+        size_t block_num = i / XTEA_BLOCK;
+        
+        printf("Блок %zu до XOR: ", block_num);
+        for (int j = 0; j < XTEA_BLOCK; j++) printf("%02x ", output->data[XTEA_BLOCK + i + j]);
+        printf("\n");
+        
+        for (int j = 0; j < XTEA_BLOCK; j++) {
+            output->data[XTEA_BLOCK + i + j] ^= prev[j];
+        }
+        
+        printf("Блок %zu после XOR: ", block_num);
+        for (int j = 0; j < XTEA_BLOCK; j++) printf("%02x ", output->data[XTEA_BLOCK + i + j]);
+        printf("\n");
+        
+        if (block_num == 0) {
+            xtea_encrypt_block_debug(output->data + XTEA_BLOCK + i, output->data + XTEA_BLOCK + i, round_keys, 0);
+        } else {
+            xtea_encrypt(output->data + XTEA_BLOCK + i, output->data + XTEA_BLOCK + i, round_keys);
+        }
+        
+        printf("Блок %zu зашифрован: ", block_num);
+        for (int j = 0; j < XTEA_BLOCK; j++) printf("%02x ", output->data[XTEA_BLOCK + i + j]);
+        printf("\n\n");
+        
+        memcpy(prev, output->data + XTEA_BLOCK + i, XTEA_BLOCK);
     }
 
     output->size = total;
+
+    printf("Полный шифротекст: ");
+    for (size_t i = 0; i < output->size; i++) printf("%02x ", output->data[i]);
+    printf("\n\n");
 
     return 0;
 }
@@ -118,17 +189,42 @@ int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
     }
 
     size_t cipher_length = input.size - XTEA_BLOCK;
-    memcpy(output->data, input.data + XTEA_BLOCK, cipher_length);
+    const uint8_t* iv = input.data;
+    const uint8_t* ciphertext = input.data + XTEA_BLOCK;
+
+    printf("\nРасшифрование XTEA в режиме CBC\n");
+    printf("Полученный шифротекст: ");
+    for (size_t i = 0; i < input.size; i++) printf("%02x ", input.data[i]);
+    printf("\n");
+
+    printf("Вектор инициализации: ");
+    for (int i = 0; i < XTEA_BLOCK; i++) printf("%02x ", iv[i]);
+    printf("\n\n");
 
     uint32_t round_keys[4];
     xtea_prepare_keys(key.data, round_keys);
 
+    uint8_t prev[XTEA_BLOCK];
+    memcpy(prev, iv, XTEA_BLOCK);
+
     for (size_t i = 0; i < cipher_length; i += XTEA_BLOCK) {
-        xtea_decrypt(
-            output->data + i,
-            output->data + i,
-            round_keys
-        );
+        size_t block_num = i / XTEA_BLOCK;
+        
+        xtea_decrypt(output->data + i, output->data + i, round_keys);
+        
+        printf("Блок %zu расшифрован: ", block_num);
+        for (int j = 0; j < XTEA_BLOCK; j++) printf("%02x ", output->data[i + j]);
+        printf("\n");
+        
+        for (int j = 0; j < XTEA_BLOCK; j++) {
+            output->data[i + j] ^= prev[j];
+        }
+        
+        printf("Блок %zu после XOR: ", block_num);
+        for (int j = 0; j < XTEA_BLOCK; j++) printf("%02x ", output->data[i + j]);
+        printf("\n\n");
+        
+        memcpy(prev, ciphertext + i, XTEA_BLOCK);
     }
 
     size_t real_length = cipher_length;
@@ -137,6 +233,13 @@ int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
     }
 
     output->size = real_length;
+
+    printf("Расшифрованные данные: ");
+    for (size_t i = 0; i < output->size; i++) printf("%02x ", output->data[i]);
+    printf("\n");
+    printf("Текст: ");
+    for (size_t i = 0; i < output->size; i++) printf("%c", output->data[i]);
+    printf("\n\n");
 
     return 0;
 }
@@ -164,12 +267,17 @@ int encrypt_fixed_iv(ConstBuffer key, ConstBuffer iv, ConstBuffer input, MutBuff
     uint32_t round_keys[4];
     xtea_prepare_keys(key.data, round_keys);
 
+    uint8_t prev[XTEA_BLOCK];
+    memcpy(prev, output->data, XTEA_BLOCK);
+
     for (size_t i = 0; i < data_with_padding; i += XTEA_BLOCK) {
-        xtea_encrypt(
-            output->data + XTEA_BLOCK + i,
-            output->data + XTEA_BLOCK + i,
-            round_keys
-        );
+        for (int j = 0; j < XTEA_BLOCK; j++) {
+            output->data[XTEA_BLOCK + i + j] ^= prev[j];
+        }
+        
+        xtea_encrypt(output->data + XTEA_BLOCK + i, output->data + XTEA_BLOCK + i, round_keys);
+        
+        memcpy(prev, output->data + XTEA_BLOCK + i, XTEA_BLOCK);
     }
 
     output->size = total;

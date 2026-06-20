@@ -2,7 +2,8 @@
 #define XTEA_H
  
 #include <cstdint>
- 
+#include <iostream>
+
 #define XTEA_BLOCK 8      
 #define XTEA_KEY 16        
 #define XTEA_ROUNDS 32    

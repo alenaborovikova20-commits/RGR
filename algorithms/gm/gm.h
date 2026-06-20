@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <iostream>
 
 #define GM_KEY_BYTES 32       
 #define GM_PUBLIC_KEY_BYTES 16  

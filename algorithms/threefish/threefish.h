@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <cstddef>
+#include <iostream>
 
 #define TF_BLOCK_SIZE 64      
 #define TF_WORDS 8            

@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <cstddef>
+#include <iostream>
 
 #define BLOWFISH_BLOCK_SIZE 8
 #define BLOWFISH_KEY_BYTES 16

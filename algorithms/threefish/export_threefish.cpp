@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <vector>
+#include <random>
 #include <stdexcept>
 #define TF_KEY_BYTES 64          
 
@@ -50,6 +51,71 @@ static void permute(uint64_t* v) {
 
 static void unpermute(uint64_t* v) {
     permute(v);
+}
+
+static void generate_iv(uint8_t* iv) {
+    std::random_device rd;
+    for (size_t i = 0; i < TF_BLOCK_SIZE; i++) {
+        iv[i] = rd() & 0xFF;
+    }
+}
+
+static void threefish_encrypt_block_debug(const uint8_t* in, uint8_t* out, const uint64_t* key, int block_num) {
+    uint64_t v[TF_WORDS];
+    
+    printf("Блок %d начальные данные: ", block_num);
+    for (int i = 0; i < TF_BLOCK_SIZE; i++) printf("%02x ", in[i]);
+    printf("\n");
+    
+    for (int i = 0; i < TF_WORDS; i++) {
+        v[i] = 0;
+        for (int b = 0; b < 8; b++) {
+            v[i] |= (uint64_t)in[i * 8 + b] << (b * 8);
+        }
+    }
+    
+    printf("Начальные слова: ");
+    for (int i = 0; i < TF_WORDS; i++) printf("%016llx ", (unsigned long long)v[i]);
+    printf("\n");
+    
+    for (int i = 0; i < TF_WORDS; i++) {
+        v[i] += key[i];
+    }
+    
+    printf("После добавления ключа: ");
+    for (int i = 0; i < TF_WORDS; i++) printf("%016llx ", (unsigned long long)v[i]);
+    printf("\n");
+    
+    for (int r = 0; r < TF_ROUNDS; r++) {
+        mix(v[0], v[1], ROT[r % 8][0]);
+        mix(v[2], v[3], ROT[r % 8][1]);
+        mix(v[4], v[5], ROT[r % 8][2]);
+        mix(v[6], v[7], ROT[r % 8][3]);
+        
+        permute(v);
+        
+        if (r % 4 == 0) {
+            for (int i = 0; i < TF_WORDS; i++) {
+                v[i] += key[i];
+            }
+        }
+        
+        if (r < 4 || r % 8 == 0) {
+            printf("Раунд %d: ", r);
+            for (int i = 0; i < TF_WORDS; i++) printf("%016llx ", (unsigned long long)v[i]);
+            printf("\n");
+        }
+    }
+    
+    for (int i = 0; i < TF_WORDS; i++) {
+        for (int b = 0; b < 8; b++) {
+            out[i * 8 + b] = (v[i] >> (b * 8)) & 0xFF;
+        }
+    }
+    
+    printf("Блок %d зашифрован: ", block_num);
+    for (int i = 0; i < TF_BLOCK_SIZE; i++) printf("%02x ", out[i]);
+    printf("\n");
 }
 
 static void threefish_encrypt_block(const uint8_t* in, uint8_t* out, const uint64_t* key) {
@@ -151,7 +217,36 @@ static std::vector<uint8_t> remove_padding(const std::vector<uint8_t>& data) {
     return std::vector<uint8_t>(data.begin(), data.end() - pad_byte);
 }
 
-static int simple_encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
+extern "C" {
+
+const AlgorithmInfo* get_algorithm_info() {
+    return &info;
+}
+
+size_t get_output_size(size_t input_size, int encrypt_mode) {
+    (void)encrypt_mode;
+    size_t block_size = TF_BLOCK_SIZE;
+    size_t padded_len = ((input_size + block_size - 1) / block_size) * block_size;
+    return TF_BLOCK_SIZE + padded_len;
+}
+
+int encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
+    if (key.size != TF_KEY_BYTES) return -1;
+    
+    size_t padded_len = ((input.size + TF_BLOCK_SIZE - 1) / TF_BLOCK_SIZE) * TF_BLOCK_SIZE;
+    size_t total_len = TF_BLOCK_SIZE + padded_len;
+    
+    if (output->size < total_len) return -2;
+    
+    uint8_t iv[TF_BLOCK_SIZE];
+    generate_iv(iv);
+    memcpy(output->data, iv, TF_BLOCK_SIZE);
+    
+    printf("\nШифрование Threefish в режиме CBC\n");
+    printf("Исходные данные: ");
+    for (size_t i = 0; i < input.size; i++) printf("%02x ", input.data[i]);
+    printf("\n");
+    
     uint64_t key_words[TF_WORDS];
     for (int i = 0; i < TF_WORDS; i++) {
         key_words[i] = 0;
@@ -163,21 +258,76 @@ static int simple_encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output)
     std::vector<uint8_t> plain(input.data, input.data + input.size);
     std::vector<uint8_t> padded = add_padding(plain);
     
+    printf("Данные после паддинга: ");
+    for (size_t i = 0; i < padded.size(); i++) printf("%02x ", padded[i]);
+    printf("\n");
+    
+    printf("Вектор инициализации: ");
+    for (int i = 0; i < TF_BLOCK_SIZE; i++) printf("%02x ", iv[i]);
+    printf("\n");
+    printf("Количество раундов: %d\n\n", TF_ROUNDS);
+    
+    uint8_t prev[TF_BLOCK_SIZE];
+    memcpy(prev, iv, TF_BLOCK_SIZE);
+    
     std::vector<uint8_t> cipher(padded.size());
+    
     for (size_t i = 0; i < padded.size(); i += TF_BLOCK_SIZE) {
-        threefish_encrypt_block(padded.data() + i, cipher.data() + i, key_words);
+        size_t block_num = i / TF_BLOCK_SIZE;
+        
+        printf("Блок %zu до XOR: ", block_num);
+        for (int j = 0; j < TF_BLOCK_SIZE; j++) printf("%02x ", padded[i + j]);
+        printf("\n");
+        
+        for (int j = 0; j < TF_BLOCK_SIZE; j++) {
+            padded[i + j] ^= prev[j];
+        }
+        
+        printf("Блок %zu после XOR: ", block_num);
+        for (int j = 0; j < TF_BLOCK_SIZE; j++) printf("%02x ", padded[i + j]);
+        printf("\n");
+        
+        if (block_num == 0) {
+            threefish_encrypt_block_debug(padded.data() + i, cipher.data() + i, key_words, 0);
+        } else {
+            threefish_encrypt_block(padded.data() + i, cipher.data() + i, key_words);
+        }
+        
+        printf("Блок %zu зашифрован: ", block_num);
+        for (int j = 0; j < TF_BLOCK_SIZE; j++) printf("%02x ", cipher[i + j]);
+        printf("\n\n");
+        
+        memcpy(prev, cipher.data() + i, TF_BLOCK_SIZE);
     }
     
-    if (output->size < cipher.size()) {
-        return -2;
-    }
-    memcpy(output->data, cipher.data(), cipher.size());
-    output->size = cipher.size();
+    memcpy(output->data + TF_BLOCK_SIZE, cipher.data(), cipher.size());
+    output->size = total_len;
+    
+    printf("Полный шифротекст: ");
+    for (size_t i = 0; i < output->size; i++) printf("%02x ", output->data[i]);
+    printf("\n\n");
+    
     return 0;
 }
 
-static int simple_decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
-    if (input.size % TF_BLOCK_SIZE != 0) return -1;
+int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
+    if (key.size != TF_KEY_BYTES) return -1;
+    if (input.size < TF_BLOCK_SIZE) return -2;
+    if ((input.size - TF_BLOCK_SIZE) % TF_BLOCK_SIZE != 0) return -3;
+    if (output->size < input.size) return -4;
+    
+    const uint8_t* iv = input.data;
+    const uint8_t* ciphertext = input.data + TF_BLOCK_SIZE;
+    size_t cipher_len = input.size - TF_BLOCK_SIZE;
+    
+    printf("\nРасшифрование Threefish в режиме CBC\n");
+    printf("Полученный шифротекст: ");
+    for (size_t i = 0; i < input.size; i++) printf("%02x ", input.data[i]);
+    printf("\n");
+    
+    printf("Вектор инициализации: ");
+    for (int i = 0; i < TF_BLOCK_SIZE; i++) printf("%02x ", iv[i]);
+    printf("\n\n");
     
     uint64_t key_words[TF_WORDS];
     for (int i = 0; i < TF_WORDS; i++) {
@@ -187,47 +337,53 @@ static int simple_decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output)
         }
     }
     
-    std::vector<uint8_t> cipher(input.data, input.data + input.size);
-    std::vector<uint8_t> padded(cipher.size());
+    uint8_t prev[TF_BLOCK_SIZE];
+    memcpy(prev, iv, TF_BLOCK_SIZE);
     
-    for (size_t i = 0; i < cipher.size(); i += TF_BLOCK_SIZE) {
-        threefish_decrypt_block(cipher.data() + i, padded.data() + i, key_words);
+    std::vector<uint8_t> decrypted(cipher_len);
+    
+    for (size_t i = 0; i < cipher_len; i += TF_BLOCK_SIZE) {
+        size_t block_num = i / TF_BLOCK_SIZE;
+        
+        threefish_decrypt_block(ciphertext + i, decrypted.data() + i, key_words);
+        
+        printf("Блок %zu расшифрован: ", block_num);
+        for (int j = 0; j < TF_BLOCK_SIZE; j++) printf("%02x ", decrypted[i + j]);
+        printf("\n");
+        
+        for (int j = 0; j < TF_BLOCK_SIZE; j++) {
+            decrypted[i + j] ^= prev[j];
+        }
+        
+        printf("Блок %zu после XOR: ", block_num);
+        for (int j = 0; j < TF_BLOCK_SIZE; j++) printf("%02x ", decrypted[i + j]);
+        printf("\n\n");
+        
+        memcpy(prev, ciphertext + i, TF_BLOCK_SIZE);
     }
     
-    std::vector<uint8_t> plain = remove_padding(padded);
+    std::vector<uint8_t> plain;
+    try {
+        plain = remove_padding(decrypted);
+    } catch (...) {
+        return -5;
+    }
     
     if (output->size < plain.size()) {
-        return -2;
+        return -6;
     }
+    
     memcpy(output->data, plain.data(), plain.size());
     output->size = plain.size();
+    
+    printf("Расшифрованные данные: ");
+    for (size_t i = 0; i < output->size; i++) printf("%02x ", output->data[i]);
+    printf("\n");
+    printf("Текст: ");
+    for (size_t i = 0; i < output->size; i++) printf("%c", output->data[i]);
+    printf("\n\n");
+    
     return 0;
-}
-
-extern "C" {
-
-const AlgorithmInfo* get_algorithm_info() {
-    return &info;
-}
-
-size_t get_output_size(size_t input_size, int encrypt_mode) {
-    (void)encrypt_mode;
-    size_t block_size = TF_BLOCK_SIZE;
-    size_t padded_len = ((input_size + block_size - 1) / block_size) * block_size;
-    return padded_len;
-}
-
-int encrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
-    if (key.size != TF_KEY_BYTES) return -1;
-    size_t needed = get_output_size(input.size, 1);
-    if (output->size < needed) return -2;
-    return simple_encrypt(key, input, output);
-}
-
-int decrypt(ConstBuffer key, ConstBuffer input, MutBuffer* output) {
-    if (key.size != TF_KEY_BYTES) return -1;
-    if (output->size < input.size) return -2;
-    return simple_decrypt(key, input, output);
 }
 
 }

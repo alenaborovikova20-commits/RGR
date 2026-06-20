@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <cstddef>
+#include <iostream>
 
 #define RC5_BLOCK_SIZE 8
 #define RC5_ROUNDS 12
